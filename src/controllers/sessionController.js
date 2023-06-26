@@ -33,15 +33,14 @@ class SessionsController {
 
 
         return res.status(200).json({
-
             data: {
                 name: user[0].name,
+                admin: user[0].admin,
                 token: jwt.sign({ id: user[0].id, name: user[0].name }, process.env.JWT_SECRET,
                     { expiresIn: process.env.EXPIRES_IN })
             }
         })
     }
-
 }
 
 export default new SessionsController()

@@ -24,7 +24,7 @@ class UserController {
         const { name, email, password, admin } = req.body
 
         const password_hash = await bcrypt.hash(password, 10)
-
+        
         try {
             const userExists = await prisma.login.findMany({ where: { email: email } })
             if (userExists.length === 0) {
@@ -42,6 +42,7 @@ class UserController {
         } catch (error) {
             return res.status(400).json({ error })
         }
+        return res.status().json({ name, email })
     }
 
 }

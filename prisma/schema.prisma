@@ -17,3 +17,9 @@ model login {
   password  String
   admin     Boolean     @default(false)
 }
+
+model post {
+  id       String   @id
+  name     String 
+  owner    String
+}
