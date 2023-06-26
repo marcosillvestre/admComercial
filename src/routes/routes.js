@@ -13,7 +13,7 @@ routes.post('/webhook', PostConttroller.store)
 routes.use(auth)
 
 routes.get('/', (req, res) => {
-    res.send("deu")
+    res.send("hello world")
 })
 
 routes.get('/controle', PostConttroller.index)
