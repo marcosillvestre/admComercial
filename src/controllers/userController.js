@@ -11,6 +11,8 @@ class UserController {
             name: Yup.string().required(),
             email: Yup.string().email().required(),
             password: Yup.string().required().min(6),
+            role: Yup.string().required(),
+            unity: Yup.string().required(),
             admin: Yup.boolean(),
         })
 
@@ -21,29 +23,47 @@ class UserController {
         }
 
 
-        const { name, email, password, admin } = req.body
+        const { name, email, password, admin, role, unity } = req.body
 
         const password_hash = await bcrypt.hash(password, 10)
-        
+
         try {
             const userExists = await prisma.login.findMany({ where: { email: email } })
             if (userExists.length === 0) {
                 await prisma.login.create({
                     data: {
                         "name": name,
-                        "email": email,
+                        "email": email.toLowerCase(),
                         "password": password_hash,
-                        "admin": admin
+                        "role": role,
+                        "admin": admin,
+                        "unity": unity
                     }
-                }).then(res => console.log(res))
-                return res.status(201).json({ name, email })
+                })
             }
 
         } catch (error) {
-            return res.status(400).json({ error })
+            return res.status(401).json({ error })
         }
-        return res.status().json({ name, email })
+        return res.status(201).json({ name, email })
     }
+
+    async index(req, res) {
+        const userExists = await prisma.login.findMany()
+        return res.status(200).json(userExists)
+    }
+
+    async delete(req, res) {
+        const { id } = req.params
+        const int = parseInt(id)
+        if (int) {
+            await prisma.login.delete({ where: { id: int } })
+            return res.sendStatus(204);
+        } else {
+            return res.status(400).json({ message: "falta algo" })
+        }
+    }
+
 
 }
 

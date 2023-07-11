@@ -10,7 +10,7 @@ const prisma = new PrismaClient()
 class SessionsController {
     async store(req, res) {
         const schema = Yup.object().shape({
-            email: Yup.string().email().required(),
+            email: Yup.string().required(),
             password: Yup.string().required(),
         })
 
@@ -18,8 +18,9 @@ class SessionsController {
             return res.status(401).json({ error: "Tem alguma coisa faltando" })
         }
         const { email, password } = req.body
+        const lowerEmail = email.toLowerCase()
 
-        const user = await prisma.login.findMany({ where: { email: email } })
+        const user = await prisma.login.findMany({ where: { email: lowerEmail } })
 
         if (user.length === 0) {
             return res.status(401).json({ message: "Tem alguma coisa errada, verifique seus dados" })
@@ -33,12 +34,13 @@ class SessionsController {
 
 
         return res.status(200).json({
-            data: {
-                name: user[0].name,
-                admin: user[0].admin,
-                token: jwt.sign({ id: user[0].id, name: user[0].name }, process.env.JWT_SECRET,
-                    { expiresIn: process.env.EXPIRES_IN })
-            }
+            name: user[0].name,
+            admin: user[0].admin,
+            role: user[0].role,
+            unity: user[0].unity,
+            token: jwt.sign({ id: user[0].id, name: user[0].name }, process.env.JWT_SECRET,
+                { expiresIn: process.env.EXPIRES_IN })
+
         })
     }
 }
