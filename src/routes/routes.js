@@ -10,13 +10,13 @@ const routes = Router();
 routes.post('/login', SessionController.store)
 routes.post('/webhook', PostConttroller.store)
 
+routes.post('/cadastro', UserController.store)
 routes.use(auth)
 
 routes.get('/', (req, res) => {
     res.send("hello world")
 })
 
-routes.post('/cadastro', UserController.store)
 routes.get('/users', UserController.index)
 routes.delete('/users/:id', UserController.delete)
 
