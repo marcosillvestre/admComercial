@@ -14,7 +14,7 @@ model login {
   password String
   admin    Boolean @default(false)
   role     String
-  unity    String
+  unity    String[]
 }
 
 model person {

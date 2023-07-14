@@ -12,7 +12,7 @@ class UserController {
             email: Yup.string().email().required(),
             password: Yup.string().required().min(6),
             role: Yup.string().required(),
-            unity: Yup.string().required(),
+            unity: Yup.array().required(),
             admin: Yup.boolean(),
         })
 
@@ -43,6 +43,7 @@ class UserController {
             }
 
         } catch (error) {
+            console.log(error)
             return res.status(401).json({ error })
         }
         return res.status(201).json({ name, email })
