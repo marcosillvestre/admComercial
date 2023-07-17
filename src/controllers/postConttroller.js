@@ -68,8 +68,10 @@ class PostController {
 
     async sender(req, res) {
         // console.log(res)
-        console.log(res)
-
+        // console.log(req.body)
+        const { partes } = req.body
+        console.log(partes)
+        // console.log(partes.map(res => res.assinado))
         return res.status(200).json({ message: "deu" })
     }
 

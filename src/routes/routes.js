@@ -10,7 +10,7 @@ const routes = Router();
 routes.post('/login', SessionController.store)
 routes.post('/webhook', PostConttroller.store)
 routes.post('/contrato', PostConttroller.sender)
-
+// 15:36:19
 routes.use(auth)
 
 routes.get('/', (req, res) => {
