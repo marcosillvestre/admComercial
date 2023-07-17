@@ -1,4 +1,5 @@
-import express, { Router } from 'express';
+import bodyParser from 'body-parser';
+import { Router } from 'express';
 import PostConttroller from "../controllers/postConttroller.js";
 import SessionController from "../controllers/sessionController.js";
 import UserController from "../controllers/userController.js";
@@ -6,9 +7,12 @@ import auth from "../middleware/auth.js";
 
 const routes = Router();
 
-routes.use(express.json())
+
 routes.post('/login', SessionController.store)
 routes.post('/webhook', PostConttroller.store)
+
+routes.use(bodyParser.urlencoded({ extended: true }));
+
 routes.post('/contrato', PostConttroller.sender)
 // 15:36:19
 routes.use(auth)
