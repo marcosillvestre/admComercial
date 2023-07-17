@@ -7,13 +7,13 @@ import auth from "../middleware/auth.js";
 
 const routes = Router();
 
+const parser = bodyParser.urlencoded({ extended: false })
 
 routes.post('/login', SessionController.store)
 routes.post('/webhook', PostConttroller.store)
 
-routes.use(bodyParser.urlencoded({ extended: true }));
 
-routes.post('/contrato', PostConttroller.sender)
+routes.post('/contrato', parser, PostConttroller.sender)
 // 15:36:19
 routes.use(auth)
 
