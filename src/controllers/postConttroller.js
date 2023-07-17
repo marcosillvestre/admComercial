@@ -67,7 +67,9 @@ class PostController {
     }
 
     async sender(req, res) {
-        console.log(req.body)
+        console.log(req)
+        console.log(res)
+
     }
 
     async update(req, res) {
