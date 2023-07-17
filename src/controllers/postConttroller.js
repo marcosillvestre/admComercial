@@ -66,15 +66,143 @@ class PostController {
         return res.status(200).json(findAll)
     }
 
+    async sender(req, res) {
+        console.log(req.body)
+    }
 
     async update(req, res) {
-        const { paStatus, situMatric, mdStatus,
+        const {
+            paStatus, situMatric, mdStatus,
             tmStatus, ppStatus, acStatus, tipoMatricula, tipoComissao,
             comissaoValor, aprovacaoADM, aprovacaoDirecao, diretorResponsavel,
             dataAC, paDATA, responsavelADM,
+            area, value
         } = req.body
 
         const id = req.params.id
+
+        if (id) {
+            if (area === "acStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "acStatus": value
+                    }
+                })
+            }
+            if (area === "tmStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "tmStatus": value
+                    }
+                })
+            }
+            if (area === "ppStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "ppStatus": value
+                    }
+                })
+            }
+            if (area === "tipoMatricula") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "tipoMatricula": value
+                    }
+                })
+            }
+            if (area === "tipoComissao") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "tipoComissao": value
+                    }
+                })
+            }
+            if (area === "comissaoValor") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "comissaoValor": value
+                    }
+                })
+            }
+            if (area === "aprovacaoADM") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "aprovacaoADM": value
+                    }
+                })
+            }
+            if (area === "aprovacaoDirecao") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "aprovacaoDirecao": value
+                    }
+                })
+            }
+            if (area === "diretorResponsavel") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "diretorResponsavel": value
+                    }
+                })
+            }
+            if (area === "dataAC") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "dataAC": value
+                    }
+                })
+            }
+            if (area === "paDATA") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "paDATA": value
+                    }
+                })
+            }
+            if (area === "responsavelADM") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "responsavelADM": value
+                    }
+                })
+            }
+            if (area === "situMatric") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "situMatric": value
+                    }
+                })
+            }
+            if (area === "paStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "paStatus": value
+                    }
+                })
+            }
+            if (area === "mdStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "mdStatus": value
+                    }
+                })
+            }
+        }
 
         if (id) {
             await prisma.person.update({

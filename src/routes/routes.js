@@ -9,7 +9,7 @@ const routes = Router();
 
 routes.post('/login', SessionController.store)
 routes.post('/webhook', PostConttroller.store)
-
+routes.post('/contrato', PostConttroller.sender)
 routes.use(auth)
 
 routes.get('/', (req, res) => {
