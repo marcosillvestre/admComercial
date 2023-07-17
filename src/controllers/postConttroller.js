@@ -68,7 +68,7 @@ class PostController {
 
     async sender(req, res) {
         // console.log(res)
-        console.log(req)
+        console.log(res)
 
         return res.status(200).json({ message: "deu" })
     }
