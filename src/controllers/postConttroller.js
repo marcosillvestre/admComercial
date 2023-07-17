@@ -71,7 +71,7 @@ class PostController {
         // console.log(req.body)
         console.log(req)
         // console.log(partes.map(res => res.assinado))
-        return res.status(200).json({ message: "deu" })
+        return res.status(200).json({ message: "funcinou" })
     }
 
     async update(req, res) {
