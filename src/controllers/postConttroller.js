@@ -73,7 +73,6 @@ class PostController {
         const email = obj['partes[0][email]']
         const signed = obj['partes[0][assinado][created]']
         const Status = JSON.stringify({ name, email, signed })
-        console.log(req.body)
         const newArr = []
 
         const { contrato, acStatus } = await prisma.person.findFirst({ where: { email: email }, })
@@ -83,6 +82,7 @@ class PostController {
             newArr.push([...acStatus, Status])
         }
         const ac = (newArr[0])
+        console.log(ac)
         await prisma.person.update({
             where: { contrato: contrato },
             data: {
