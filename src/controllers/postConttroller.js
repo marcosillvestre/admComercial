@@ -68,6 +68,7 @@ class PostController {
 
     async sender(req, res) {
         const str = JSON.stringify(req.body)
+        console.log(req.body)
         const obj = JSON.parse(str)
         const name = obj['partes[0][nome]']
         const email = obj['partes[0][email]']
