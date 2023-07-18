@@ -76,9 +76,8 @@ class PostController {
         }
         const ac = str.JSON.stringify(str, null, 2)
         console.log(ac)
-        if (partesEmail) {
-            await prisma.person.findMany({ where: { email: partesEmail } }).then(res => console.log(res))
-        }
+        await prisma.person.findMany({ where: { email: partesEmail } }).then(res => console.log(res))
+
         //     if (id) {
         //         if (area === "acStatus") {
         //             await prisma.person.update({
