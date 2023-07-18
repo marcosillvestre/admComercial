@@ -88,7 +88,7 @@ class PostController {
             data: {
                 "acStatus": ac
             }
-        })
+        }).then(res => console.log(res))
 
         return res.status(200).json({ message: "funcinou" })
     }
