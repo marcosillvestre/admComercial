@@ -67,8 +67,8 @@ class PostController {
     }
 
     async sender(req, res) {
-        console.log(JSON.stringify(req.body))
-
+        const str = JSON.stringify(req.body)
+        console.log(JSON.parse(str))
         return res.status(200).json({ message: "funcinou" })
     }
 
