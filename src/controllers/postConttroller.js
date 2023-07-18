@@ -44,7 +44,7 @@ class PostController {
                         "responsavelADM": "Pendente",
                         "aprovacaoDirecao": "Pendente",
                         "diretorResponsavel": "Pendente",
-                        "dataAC": "Pendente",
+                        "dataAC": [],
                         "paDATA": res.data.data.customFields.data_da_primeira_aula,
                         "inicioContrato": res.data.data.customFields.data_de_vencimento_da_primeira,
                         "fimContrato": res.data.data.customFields.data_de_vencimento_da_ultima_p,
@@ -68,7 +68,21 @@ class PostController {
 
     async sender(req, res) {
         const str = JSON.stringify(req.body)
-        console.log(JSON.parse(str))
+        const obj = JSON.parse(str)
+        const name = obj['partes[0][nome]']
+        const email = obj['partes[0][email]']
+        const signed = obj['partes[0][assinado][created]']
+        const Status = JSON.stringify({ name, email, signed })
+
+        const { contrato } = await prisma.person.findFirst({ where: { email: email }, })
+        await prisma.person.update({
+            where: { contrato: contrato },
+            data: {
+                "acStatus": Status
+            }
+        })
+            .then(res => console.log(res))
+
         return res.status(200).json({ message: "funcinou" })
     }
 
@@ -236,3 +250,5 @@ class PostController {
 }
 
 export default new PostController()
+
+

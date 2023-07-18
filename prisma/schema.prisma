@@ -33,7 +33,7 @@ model person {
   ppStatus           String
   mdValor            String
   mdStatus           String
-  acStatus           String
+  acStatus           String[]
   acFormato          String
   tipoMatricula      String
   tipoComissao       String
