@@ -68,6 +68,7 @@ class PostController {
 
     async sender(req, res) {
         const { partesNome, partesData, partesEmail } = req.body
+        console.log(req)
         const str = {
             "nome": partesNome,
             "data": partesData,
