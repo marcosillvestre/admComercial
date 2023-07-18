@@ -73,7 +73,7 @@ class PostController {
         const email = obj['partes[0][email]']
         const signed = obj['partes[0][assinado][created]']
         const Status = JSON.stringify({ name, email, signed })
-
+        console.log(req.body)
         const newArr = []
 
         const { contrato, acStatus } = await prisma.person.findFirst({ where: { email: email }, })
