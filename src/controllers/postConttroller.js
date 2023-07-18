@@ -67,28 +67,7 @@ class PostController {
     }
 
     async sender(req, res) {
-        const { partesNome, partesData, partesEmail } = req.body
-        console.log(req)
-        const str = {
-            "nome": partesNome,
-            "data": partesData,
-            "email": partesEmail
-        }
-        const ac = str.JSON.stringify(str, null, 2)
-        console.log(ac)
-        await prisma.person.findMany({ where: { email: partesEmail } }).then(res => console.log(res))
-
-        //     if (id) {
-        //         if (area === "acStatus") {
-        //             await prisma.person.update({
-        //                 where: { contrato: id },
-        //                 data: {
-        //                     "acStatus": value
-        //                 }
-        //             })
-        //         }
-
-        // }
+        console.log(JSON.stringify(req.body))
 
         return res.status(200).json({ message: "funcinou" })
     }
