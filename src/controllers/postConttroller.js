@@ -67,10 +67,29 @@ class PostController {
     }
 
     async sender(req, res) {
-        // console.log(res)
-        // console.log(req.body)
-        console.log(req)
-        // console.log(partes.map(res => res.assinado))
+        const { partesNome, partesData, partesEmail } = req.body
+        const str = {
+            "nome": partesNome,
+            "data": partesData,
+            "email": partesEmail
+        }
+        const ac = str.JSON.stringify(str, null, 2)
+        console.log(ac)
+        if (partesEmail) {
+            await prisma.person.findMany({ where: { email: partesEmail } }).then(res => console.log(res))
+        }
+        //     if (id) {
+        //         if (area === "acStatus") {
+        //             await prisma.person.update({
+        //                 where: { contrato: id },
+        //                 data: {
+        //                     "acStatus": value
+        //                 }
+        //             })
+        //         }
+
+        // }
+
         return res.status(200).json({ message: "funcinou" })
     }
 
@@ -86,14 +105,6 @@ class PostController {
         const id = req.params.id
 
         if (id) {
-            if (area === "acStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "acStatus": value
-                    }
-                })
-            }
             if (area === "tmStatus") {
                 await prisma.person.update({
                     where: { contrato: id },
