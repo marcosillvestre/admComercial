@@ -69,20 +69,48 @@ class PostController {
     async sender(req, res) {
         const str = JSON.stringify(req.body)
         const obj = JSON.parse(str)
-        console.log(obj)
-        const name = obj['partes[0][nome]'].split(" ")[0]
-        const email = obj['partes[0][email]']
-        const signed = obj['partes[0][assinado][created]'].split(" ")[0]
-        const Status = JSON.stringify({ name, email, signed })
+
+        const name1 = obj['partes[0][nome]']?.split(" ")[0]
+        const email1 = obj['partes[0][email]']
+        const signed1 = obj['partes[0][assinado][created]']?.split(" ")[0]
+
+        const name2 = obj['partes[1][nome]']?.split(" ")[0]
+        const email2 = obj['partes[1][email]']
+        const signed2 = obj['partes[1][assinado][created]']?.split(" ")[0]
+
+        const name3 = obj['partes[2][nome]']?.split(" ")[0]
+        const email3 = obj['partes[2][email]']
+        const signed3 = obj['partes[2][assinado][created]']?.split(" ")[0]
+
+        const name4 = obj['partes[3][nome]']?.split(" ")[0]
+        const email4 = obj['partes[3][email]']
+        const signed4 = obj['partes[3][assinado][created]']?.split(" ")[0]
+
+
+        const Status = JSON.stringify({
+            name1,
+            email1,
+            signed1,
+
+            name2,
+            email2,
+            signed2,
+
+            name3,
+            email3,
+            signed3,
+
+            name4,
+            email4,
+            signed4,
+        })
 
         const newArr = []
 
-        await prisma.person.findFirst({ where: { email: email }, }).then(async res => {
-            console.log(res.contrato)
-            console.log(res.acStatus)
+        await prisma.person.findFirst({ where: { email: email1 }, }).then(async res => {
 
             if (res.acStatus.length < 5) {
-                newArr.push([...res.acStatus, Status])
+                newArr.push(...res.acStatus, Status)
             }
 
             const ac = (newArr[0])
@@ -264,5 +292,6 @@ class PostController {
 }
 
 export default new PostController()
+
 
 
