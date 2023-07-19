@@ -110,7 +110,7 @@ class PostController {
         await prisma.person.findFirst({ where: { email: email1 }, }).then(async res => {
 
             if (res.acStatus.length < 5) {
-                newArr.push(...res.acStatus, Status)
+                newArr.push(Status)
             }
 
             const ac = (newArr[0])
