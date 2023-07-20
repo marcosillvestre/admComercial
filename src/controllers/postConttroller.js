@@ -177,6 +177,14 @@ class PostController {
         const id = req.params.id
 
         if (id) {
+            if (area === "acStatus") {
+                await prisma.person.update({
+                    where: { contrato: id },
+                    data: {
+                        "acStatus": value
+                    }
+                })
+            }
             if (area === "tmStatus") {
                 await prisma.person.update({
                     where: { contrato: id },
@@ -290,8 +298,8 @@ class PostController {
                 })
             }
         }
-
         if (id) {
+            console.log(id)
             await prisma.person.update({
                 where: { contrato: id },
                 data: {
@@ -311,12 +319,17 @@ class PostController {
                     "paStatus": paStatus,
                     "mdStatus": mdStatus
                 }
-            }).then(() => {
+            }).then(r => {
+                console.log(r)
                 return res.status(200).json({ message: "Atualizado com sucesso" })
+            }).catch(() => {
+                return res.status(400).json({ message: "Tem alguma coisa faltando" })
             })
-        } else {
-            return res.status(400).json({ message: "Tem alguma coisa faltando" })
+
         }
+
+
+
     }
     async delete(req, res) {
         const { id } = req.params
