@@ -54,7 +54,7 @@ model person {
   subclasse                 String
   ppStatus                  String
 
-
+  comissaoStatus            String
   dataAC                    String[]
   formatoAula               String
   tipoModalidade            String

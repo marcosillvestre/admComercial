@@ -104,7 +104,7 @@ class PostController {
     }
 
     async sender(req, res) {
-        const str = JSON.stringify(req.body)
+        const str = JSON.ify(req.body)
         const obj = JSON.parse(str)
 
         const name1 = obj['partes[0][nome]']?.split(" ")[0]
@@ -124,7 +124,7 @@ class PostController {
         const signed4 = obj['partes[3][assinado][created]']?.split(" ")[0]
 
 
-        const Status = JSON.stringify({
+        const Status = JSON.ify({
             name1,
             email1,
             signed1,
@@ -166,168 +166,21 @@ class PostController {
     }
 
     async update(req, res) {
-        const {
-            paStatus, situMatric, mdStatus,
-            tmStatus, ppStatus, acStatus, tipoMatricula, tipoComissao,
-            comissaoValor, aprovacaoADM, aprovacaoDirecao, diretorResponsavel,
-            dataAC, paDATA, responsavelADM,
-            area, value
-        } = req.body
+        const { area, value } = req.body
+        const { id } = req.params
 
-        const id = req.params.id
 
-        if (id) {
-            if (area === "acStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "acStatus": value
-                    }
-                })
+        await prisma.person.update({
+            where: { contrato: id },
+            data: {
+                [area]: value
             }
-            if (area === "tmStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "tmStatus": value
-                    }
-                })
-            }
-            if (area === "ppStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "ppStatus": value
-                    }
-                })
-            }
-            if (area === "tipoMatricula") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "tipoMatricula": value
-                    }
-                })
-            }
-            if (area === "tipoComissao") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "tipoComissao": value
-                    }
-                })
-            }
-            if (area === "comissaoValor") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "comissaoValor": value
-                    }
-                })
-            }
-            if (area === "aprovacaoADM") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "aprovacaoADM": value
-                    }
-                })
-            }
-            if (area === "aprovacaoDirecao") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "aprovacaoDirecao": value
-                    }
-                })
-            }
-            if (area === "diretorResponsavel") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "diretorResponsavel": value
-                    }
-                })
-            }
-            if (area === "dataAC") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "dataAC": value
-                    }
-                })
-            }
-            if (area === "paDATA") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "paDATA": value
-                    }
-                })
-            }
-            if (area === "responsavelADM") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "responsavelADM": value
-                    }
-                })
-            }
-            if (area === "situMatric") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "situMatric": value
-                    }
-                })
-            }
-            if (area === "paStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "paStatus": value
-                    }
-                })
-            }
-            if (area === "mdStatus") {
-                await prisma.person.update({
-                    where: { contrato: id },
-                    data: {
-                        "mdStatus": value
-                    }
-                })
-            }
+        }).then(() => {
+            return res.status(200).json("Success")
+        }).catch(() => {
+            return res.status(200).json("Error")
         }
-        if (id) {
-            console.log(id)
-            await prisma.person.update({
-                where: { contrato: id },
-                data: {
-                    "tmStatus": tmStatus,
-                    "ppStatus": ppStatus,
-                    "acStatus": acStatus,
-                    "tipoMatricula": tipoMatricula,
-                    "tipoComissao": tipoComissao,
-                    "comissaoValor": comissaoValor,
-                    "aprovacaoADM": aprovacaoADM,
-                    "aprovacaoDirecao": aprovacaoDirecao,
-                    "diretorResponsavel": diretorResponsavel,
-                    "dataAC": dataAC,
-                    "paDATA": paDATA,
-                    "responsavelADM": responsavelADM,
-                    "situMatric": situMatric,
-                    "paStatus": paStatus,
-                    "mdStatus": mdStatus
-                }
-            }).then(r => {
-                console.log(r)
-                return res.status(200).json({ message: "Atualizado com sucesso" })
-            }).catch(() => {
-                return res.status(400).json({ message: "Tem alguma coisa faltando" })
-            })
-
-        }
-
+        )
 
 
     }
