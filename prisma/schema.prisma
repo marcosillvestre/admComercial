@@ -18,38 +18,81 @@ model login {
 }
 
 model person {
-  name               String
-  owner              String
-  aluno              String
-  unidade            String
-  contrato           String @id
-  background         String
-  classe             String
-  subclasse          String
-  tmStatus           String
-  tmVencimento       String
-  tmValor            String
-  ppVencimento       String
-  ppStatus           String
-  mdValor            String
-  mdStatus           String
-  acStatus           String[]
-  acFormato          String
-  tipoMatricula      String
-  tipoComissao       String
-  comissaoValor      String
-  aprovacaoADM       String
-  responsavelADM     String
-  aprovacaoDirecao   String
-  diretorResponsavel String
-  dataAC             String
-  paDATA             String
-  inicioContrato     String
-  fimContrato        String
-  tel                String
-  email              String
-  Valor              Float
-  id                 Int    
-  paStatus           String
-  situMatric         String
+  name                      String
+  owner                     String
+  unidade                   String
+  background                String
+  tipoMatricula             String
+  tipoComissao              String
+  comissaoValor             String
+  diretorResponsavel        String
+  Valor                     Float
+  id                        Int    
+  paStatus                  String
+  situMatric                String
+
+  
+  responsavelADM            String
+  aprovacaoADM              String
+  aprovacaoDirecao          String
+  contrato                  String @id
+  inicioContrato            String
+  fimContrato               String
+  acFormato                 String
+  acStatus                  String
+  tmValor                   String
+  tmVencimento              String
+  tmStatus                  String
+  ppVencimento              String
+  mdValor                   String
+  mdStatus                  String
+  aluno                     String
+  tel                       String
+  email                     String
+  paDATA                    String
+  classe                    String
+  subclasse                 String
+  ppStatus                  String
+
+
+  dataAC                    String[]
+  formatoAula               String
+  tipoModalidade            String
+  professor                 String[]
+  horarioFim                String
+  horarioInicio             String
+  materialDidatico          String[]
+  nivelamento               String
+  diaAula                   String[]
+  alunoNascimento           String
+  idadeAluno                String 
+  tempoContrato             String
+  dataMatricula             String
+  observacao	              String
+  dataValidacao	            String
+  dataComissionamento	      String
+  contratoStatus            String
+  cargaHoraria              String 			
+  tmDesconto	              String
+  tmFormaPg	                String
+  tmParcelas                String
+  tmData                    String
+  ppDesconto	              String
+  ppFormaPg	                String
+  ppParcelas                String
+  ppData                    String
+  ppValor                   String
+  mdDesconto	              String
+  mdFormaPg	                String
+  mdParcelas                String
+  mdData                    String
+  mdVencimento              String
 }
+
+
+
+
+
+
+
+
