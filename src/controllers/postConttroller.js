@@ -106,7 +106,6 @@ class PostController {
     async sender(req, res) {
         const str = JSON.stringify(req.body)
         const obj = JSON.parse(str)
-        console.log(obj)
 
         const name1 = obj['partes[0][nome]']?.split(" ")[0]
         const email1 = obj['partes[0][email]']
@@ -142,23 +141,20 @@ class PostController {
             email4,
             signed4,
         })
-
         const newArr = []
 
-        await prisma.person.findFirst({ where: { email: email1 }, }).then(async res => {
+        await prisma.person.findFirst({ where: { email: email1 } }).then(async res => {
 
-            if (res.acStatus.length < 5) {
+            if (res.dataAC.length < 5) {
                 newArr.push(Status)
             }
-
-            const ac = (newArr[0])
 
             await prisma.person.update({
                 where: { contrato: res.contrato },
                 data: {
-                    "dataAC": ac
+                    "dataAC": newArr
                 }
-            }).then(res => console.log(res))
+            }).then(() => console.log("Success"))
         })
 
         return res.status(200).json({ message: "funcinou" })
