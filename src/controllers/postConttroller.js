@@ -87,8 +87,8 @@ class PostController {
                         "mdFormaPg": res.data.data.customFields.md_forma_de_pagamento.value,
                         "mdParcelas": "res.data.data.customFields",
                         "mdData": "",
-                        "mdVencimento": res.data.data.customFields.md_data_de_pagamento
-
+                        "mdVencimento": res.data.data.customFields.md_data_de_pagamento,
+                        "comissaoStatus": "Pendente"
                     }
                 })
 
