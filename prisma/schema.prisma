@@ -8,83 +8,80 @@ datasource db {
 }
 
 model login {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
-  email    String  @unique
+  email    String   @unique
   password String
-  admin    Boolean @default(false)
+  admin    Boolean  @default(false)
   role     String
   unity    String[]
 }
 
 model person {
-  name                      String
-  owner                     String
-  unidade                   String
-  background                String
-  tipoMatricula             String
-  tipoComissao              String
-  comissaoValor             String
-  diretorResponsavel        String
-  Valor                     Float
-  id                        Int    
-  paStatus                  String
-  situMatric                String
-
-  
-  responsavelADM            String
-  aprovacaoADM              String
-  aprovacaoDirecao          String
-  contrato                  String @id
-  inicioContrato            String
-  fimContrato               String
-  acFormato                 String
-  acStatus                  String
-  tmValor                   String
-  tmVencimento              String
-  tmStatus                  String
-  ppVencimento              String
-  mdValor                   String
-  mdStatus                  String
-  aluno                     String
-  tel                       String
-  email                     String
-  paDATA                    String
-  classe                    String
-  subclasse                 String
-  ppStatus                  String
-
-  comissaoStatus            String
-  dataAC                    Json
-  formatoAula               String
-  tipoModalidade            String
-  professor                 String[]
-  horarioFim                String
-  horarioInicio             String
-  materialDidatico          String[]
-  nivelamento               String
-  diaAula                   String[]
-  alunoNascimento           String
-  idadeAluno                String 
-  tempoContrato             String
-  dataMatricula             String
-  observacao	              String
-  dataValidacao	            String
-  dataComissionamento	      String
-  contratoStatus            String
-  cargaHoraria              String 			
-  tmDesconto	              String
-  tmFormaPg	                String
-  tmParcelas                String
-  tmData                    String
-  ppDesconto	              String
-  ppFormaPg	                String
-  ppParcelas                String
-  ppData                    String
-  ppValor                   String
-  mdDesconto	              String
-  mdFormaPg	                String
-  mdParcelas                String
-  mdData                    String
-  mdVencimento              String
+  name                String
+  owner               String
+  aluno               String
+  unidade             String
+  contrato            String   @id
+  background          String
+  classe              String
+  subclasse           String
+  tmStatus            String
+  tmVencimento        String
+  tmValor             String
+  ppVencimento        String
+  ppStatus            String
+  mdValor             String
+  mdStatus            String
+  acFormato           String
+  tipoMatricula       String
+  tipoComissao        String
+  comissaoValor       String
+  aprovacaoADM        String
+  responsavelADM      String
+  aprovacaoDirecao    String
+  diretorResponsavel  String
+  paDATA              String
+  inicioContrato      String
+  fimContrato         String
+  tel                 String
+  email               String
+  Valor               Float
+  id                  Int
+  paStatus            String
+  situMatric          String
+  acStatus            String
+  alunoNascimento     String
+  cargaHoraria        String
+  contratoStatus      String
+  dataComissionamento String
+  dataMatricula       String
+  dataValidacao       String
+  formatoAula         String
+  horarioFim          String
+  horarioInicio       String
+  idadeAluno          String
+  materialDidatico    String[]
+  mdData              String
+  mdDesconto          String
+  mdFormaPg           String
+  mdParcelas          String
+  mdVencimento        String
+  nivelamento         String
+  observacao          String
+  ppData              String
+  ppDesconto          String
+  ppFormaPg           String
+  ppParcelas          String
+  ppValor             String
+  tempoContrato       String
+  tipoModalidade      String
+  tmData              String
+  tmDesconto          String
+  tmFormaPg           String
+  tmParcelas          String
+  dataAC              Json
+  diaAula             String[]
+  comissaoStatus      String
+  professor           String[]
 }
