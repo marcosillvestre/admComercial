@@ -106,6 +106,7 @@ class PostController {
     async sender(req, res) {
         const str = JSON.ify(req.body)
         const obj = JSON.parse(str)
+        console.log(obj)
 
         const name1 = obj['partes[0][nome]']?.split(" ")[0]
         const email1 = obj['partes[0][email]']
@@ -158,8 +159,6 @@ class PostController {
                     "dataAC": ac
                 }
             }).then(res => console.log(res))
-
-
         })
 
         return res.status(200).json({ message: "funcinou" })
