@@ -125,7 +125,7 @@ class PostController {
         const signed4 = obj['partes[3][assinado][created]']?.split(" ")[0]
 
 
-        const Status = JSON.ify({
+        const Status = JSON.stringify({
             name1,
             email1,
             signed1,
