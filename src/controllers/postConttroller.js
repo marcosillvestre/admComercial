@@ -104,7 +104,7 @@ class PostController {
     }
 
     async sender(req, res) {
-        const str = JSON.ify(req.body)
+        const str = JSON.stringify(req.body)
         const obj = JSON.parse(str)
         console.log(obj)
 
