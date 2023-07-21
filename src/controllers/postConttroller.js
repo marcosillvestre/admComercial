@@ -124,22 +124,29 @@ class PostController {
         const signed4 = obj['partes[3][assinado][created]']?.split(" ")[0]
 
 
-        const Status = JSON.stringify({
+        const body1 = {
             name1,
             email1,
             signed1,
-
+        }
+        const body2 = {
             name2,
             email2,
             signed2,
-
+        }
+        const body3 = {
             name3,
             email3,
             signed3,
-
+        }
+        const body4 = {
             name4,
             email4,
             signed4,
+        }
+
+        const Status = JSON.stringify({
+            body1, body2, body3, body4
         })
         const newArr = []
 
@@ -190,6 +197,5 @@ class PostController {
 }
 
 export default new PostController()
-
 
 

@@ -55,7 +55,7 @@ model person {
   ppStatus                  String
 
   comissaoStatus            String
-  dataAC                    String[]
+  dataAC                    Json
   formatoAula               String
   tipoModalidade            String
   professor                 String[]
