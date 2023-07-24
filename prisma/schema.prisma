@@ -80,7 +80,8 @@ model person {
   tmDesconto          String
   tmFormaPg           String
   tmParcelas          String
-  dataAC              Json
+  dataAC              Json?
+  cpfPerson           String
   diaAula             String[]
   comissaoStatus      String
   professor           String[]
