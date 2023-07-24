@@ -55,7 +55,7 @@ class PostController {
                         "ppStatus": "Pendente",
 
 
-                        "dataAC": { set: [{ obj }] },
+                        "dataAC": { set: [{ value: "Pendente" }] },
                         "formatoAula": res.data.data.customFields.formato_de_aula.value,
                         "tipoModalidade": res.data.data.customFields.tipo_modalidade.value,
                         "professor": res.data.data.customFields.professor.map(res => res.value),
