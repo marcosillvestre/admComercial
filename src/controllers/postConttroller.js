@@ -55,7 +55,7 @@ class PostController {
                         "ppStatus": "Pendente",
 
 
-                        "dataAC": { set: [{ value: "Pendente" }] },
+                        "dataAC": { set: ["Pendente"] },
                         "formatoAula": res.data.data.customFields.formato_de_aula.value,
                         "tipoModalidade": res.data.data.customFields.tipo_modalidade.value,
                         "professor": res.data.data.customFields.professor.map(res => res.value),
@@ -152,17 +152,15 @@ class PostController {
         const newArr = []
 
         await prisma.person.findFirst({ where: { email: email1 } }).then(async res => {
-            console.log(res)
-            // if (res.dataAC) {
-            //     newArr.push(Status)
-            // }
 
-            // await prisma.person.update({
-            //     where: { contrato: res.contrato },
-            //     data: {
-            //         "dataAC": newArr
-            //     }
-            // }).then(() => console.log("Success"))
+            newArr.push(Status)
+
+            await prisma.person.update({
+                where: { contrato: res.contrato },
+                data: {
+                    "dataAC": newArr
+                }
+            }).then(() => console.log("Success"))
         })
 
         return res.status(200).json({ message: "funcinou" })
