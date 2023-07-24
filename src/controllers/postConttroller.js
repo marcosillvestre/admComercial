@@ -13,7 +13,7 @@ class PostController {
             "Authorization": `Token ${process.env.AGENDOR_TOKEN}`
         }
 
-
+        const obj = "Pendente"
         await axios.get(`https://api.agendor.com.br/v3/deals/${id}?withCustomFields=true`, { headers })
             .then(async res => {
                 await prisma.person.create({
@@ -55,7 +55,7 @@ class PostController {
                         "ppStatus": "Pendente",
 
 
-                        "dataAC": { set: "Pendente" },
+                        "dataAC": { set: obj },
                         "formatoAula": res.data.data.customFields.formato_de_aula.value,
                         "tipoModalidade": res.data.data.customFields.tipo_modalidade.value,
                         "professor": res.data.data.customFields.professor.map(res => res.value),
