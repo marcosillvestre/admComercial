@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { CronJob } from "cron";
+import "dotenv/config";
+
 const prisma = new PrismaClient()
 
 const job = new CronJob(
@@ -23,7 +25,7 @@ const endDate = eendDate.toISOString()
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
 
-    fetch(`https://crm.rdstation.com/api/v1/deals?token=64c1219c7de4220029d55fc7&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
+    fetch(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(response => response.json())
         .then(async response => {
             const array = []
