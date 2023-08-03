@@ -60,7 +60,7 @@ async function searchSync() {
                     mdValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do material didático')).map(res => res.value)[0],
                     mdStatus: "Pendente",
                     aluno: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nome do aluno')).map(res => res.value)[0],
-                    tel: index.contacts.map(res => res.phones).map(res => res[0].phone),
+                    tel: index.contacts.map(res => res.phones).map(res => res[0]?.phone),
                     email: index.contacts.map(res => res.emails).map(res => res[0]?.email),
                     paDATA: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data da primeira aula')).map(res => res.value)[0],
                     classe: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Classe')).map(res => res.value)[0],
