@@ -14,13 +14,13 @@ routes.post('/login', SessionController.store)
 routes.post('/contrato', parser, PostConttroller.sender)
 routes.post('/cadastro', UserController.store)
 
-routes.get('/contrato/:unity', PostConttroller.getRecent)
 routes.use(auth)
 
 routes.get('/', (req, res) => {
     res.send("hello world")
 })
 
+routes.get('/contrato/:unity', PostConttroller.getRecent)
 
 routes.get('/users', UserController.index)
 routes.delete('/users/:id', UserController.delete)
