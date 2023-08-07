@@ -1,7 +1,85 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
+
+const sstartDate = new Date()
+sstartDate.setDate(sstartDate.getDate() - 1)
+const startDate = sstartDate.toISOString()
+
+const eendDate = new Date()
+const endDate = eendDate.toISOString()
 class PostController {
 
+    async getRecent(req, res) {
+
+        const ptb = "63602cabdef82800153ec290"
+        const matriculaPtb = "63602cabdef82800153ec295"
+
+        const centro = "64bad548430b870026994c8c"
+        const matriculaCentro = "64bad548430b870026994c91"
+
+        const options = { method: 'GET', headers: { accept: 'application/json' } }
+
+        const { unity } = req.params
+
+        const unidade = unity === "ptb" ? ptb : centro
+        const etapa = unity === "ptb" ? matriculaPtb : matriculaCentro
+
+
+        fetch(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`, options)
+            .then(response => response.json())
+            .then(response => {
+
+                const array = []
+                for (const index of response.deals) {
+                    const body = {
+                        vendedor: index.user.name,
+                        contrato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nº do contrato')).map(res => res.value)[0],
+                        dataMatricula: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de emissão da venda')).map(res => res.value)[0],
+                        classe: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Classe')).map(res => res.value)[0],
+                        unidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Unidade')).map(res => res.value)[0],
+                        tipoModalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Tipo/ modalidade')).map(res => res.value)[0],
+                        name: index.name,
+                        rg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('RG responsável')).map(res => res.value)[0],
+                        cpf: index.deal_custom_fields.filter(res => res.custom_field.label.includes('CPF')).map(res => res.value)[0],
+                        DatadeNascdoResp: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do  responsável')).map(res => res.value)[0],
+                        CelularResponsavel: index.contacts[0]?.phones[0]?.phone,
+                        EnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Rua')).map(res => res.value)[0],
+                        NumeroEnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número')).map(res => res.value)[0],
+                        complemento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Complemento')).map(res => res.value)[0],
+                        bairro: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Bairro')).map(res => res.value)[0],
+                        cidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Cidade')).map(res => res.value)[0],
+                        estado: index.deal_custom_fields.filter(res => res.custom_field.label === 'Estado').map(res => res.value)[0],
+                        cep: index.deal_custom_fields.filter(res => res.custom_field.label.includes('CEP')).map(res => res.value)[0],
+                        estadoCivil: index.deal_custom_fields.filter(res => res.custom_field.label === 'Estado civil responsável').map(res => res.value)[0],
+                        profissao: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Profissão')).map(res => res.value)[0],
+                        email: index.contacts[0]?.emails[0]?.email,
+                        nomeAluno: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nome do aluno')).map(res => res.value)[0],
+                        nascimentoAluno: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do aluno')).map(res => res.value)[0],
+                        formato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Formato de Aula')).map(res => res.value)[0],
+                        tipoModalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Tipo/ modalidade')).map(res => res.value)[0],
+                        classe: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Classe')).map(res => res.value)[0],
+                        subclasse: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Subclasse')).map(res => res.value)[0],
+                        cargaHoraria: `${index.deal_custom_fields.filter(res => res.custom_field.label.includes('Carga horário do curso')).map(res => res.value)}`,
+                        paDATA: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data da primeira aula')).map(res => res.value)[0],
+                        valorMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value)[0],
+                        numeroParcelas: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número de parcelas')).map(res => res.value)[0],
+                        diaVenvimento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da primeira parcela')).map(res => res.value)[0],
+                        dataPrimeiraParcelaMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da primeira parcela')).map(res => res.value)[0],
+                        dataUltimaParcelaMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da última parcela')).map(res => res.value)[0],
+                        descontoTotal: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Desconto total')).map(res => res.value)[0],
+                        descontoPorParcela: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do desconto de pontualidade por parcela')).map(res => res.value)[0],
+                        valorParcela: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value)[0],
+                        testemunha1: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Testemunha 01')).map(res => res.value)[0],
+                        testemunha2: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Testemunha 2')).map(res => res.value)[0],
+                        curso: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Curso')).map(res => res.value)[0],
+                    }
+                    array.push(body)
+                }
+                return res.status(200).json(array)
+
+            })
+
+    }
 
     async index(req, res) {
         const findAll = await prisma.person.findMany()
@@ -105,5 +183,4 @@ class PostController {
 }
 
 export default new PostController()
-
 

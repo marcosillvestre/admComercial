@@ -14,6 +14,7 @@ routes.post('/login', SessionController.store)
 routes.post('/contrato', parser, PostConttroller.sender)
 routes.post('/cadastro', UserController.store)
 
+routes.get('/contrato/:unity', PostConttroller.getRecent)
 routes.use(auth)
 
 routes.get('/', (req, res) => {
