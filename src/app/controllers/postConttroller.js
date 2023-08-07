@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import axios from 'axios';
 const prisma = new PrismaClient()
-
 const sstartDate = new Date()
 sstartDate.setDate(sstartDate.getDate() - 1)
 const startDate = sstartDate.toISOString()
@@ -17,7 +17,6 @@ class PostController {
         const centro = "64bad548430b870026994c8c"
         const matriculaCentro = "64bad548430b870026994c91"
 
-        const options = { method: 'GET', headers: { accept: 'application/json' } }
 
         const { unity } = req.params
 
@@ -25,12 +24,11 @@ class PostController {
         const etapa = unity === "ptb" ? matriculaPtb : matriculaCentro
 
 
-        fetch(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`, options)
-            .then(response => response.json())
+        axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`)
             .then(response => {
 
                 const array = []
-                for (const index of response.deals) {
+                for (const index of response?.data?.deals) {
                     const body = {
                         vendedor: index.user.name,
                         contrato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nº do contrato')).map(res => res.value)[0],

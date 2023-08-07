@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import axios from 'axios';
 import { CronJob } from "cron";
 import "dotenv/config";
 
@@ -8,7 +9,7 @@ const job = new CronJob(
     '0 */60 * * * *',
 
     function () {
-        // searchSync()
+        searchSync()
     },
     null,
     true,
@@ -26,11 +27,10 @@ const endDate = eendDate.toISOString()
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
 
-    fetch(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
-        .then(response => response.json())
+    axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
             const array = []
-            for (const index of response?.deals) {
+            for (const index of response?.data?.deals) {
                 const body = {
                     name: index.name,
                     owner: index.user.name,
@@ -190,81 +190,9 @@ async function searchSync() {
                 })
 
             }
-
-
-
         })
         .catch(err => console.error(err));
 
 }
-
-const ptb = "63602cabdef82800153ec290"
-const matriculaPtb = "63602cabdef82800153ec295"
-
-const centro = "64bad548430b870026994c8c"
-const matriculaCentro = "64bad548430b870026994c91"
-
-async function kk() {
-    const unity = "centro"
-
-    const unidade = unity === "ptb" ? ptb : centro
-    const etapa = unity === "ptb" ? matriculaPtb : matriculaCentro
-
-    const options = { method: 'GET', headers: { accept: 'application/json' } }
-    fetch(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`, options)
-        .then(response => response.json())
-        .then(response => {
-            const array = []
-            // console.log(response.deals[0].deal_custom_fields.filter(res => res.custom_field.label.includes("estemunha")))
-            for (const index of response.deals) {
-                const body = {
-                    contrato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nº do contrato')).map(res => res.value)[0],
-                    dataMatricula: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de emissão da venda')).map(res => res.value)[0],
-                    classe: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Classe')).map(res => res.value)[0],
-                    unidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Unidade')).map(res => res.value)[0],
-                    tipoModalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Tipo/ modalidade')).map(res => res.value)[0],
-                    name: index.name,
-                    rg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('RG responsável')).map(res => res.value)[0],
-                    cpf: index.deal_custom_fields.filter(res => res.custom_field.label.includes('CPF')).map(res => res.value)[0],
-                    DatadeNascdoResp: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do  responsável')).map(res => res.value)[0],
-                    CelularResponsavel: index.contacts[0]?.phones[0]?.phone,
-                    EnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Rua')).map(res => res.value)[0],
-                    NumeroEnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número')).map(res => res.value)[0],
-                    complemento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Complemento')).map(res => res.value)[0],
-                    bairro: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Bairro')).map(res => res.value)[0],
-                    cidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Cidade')).map(res => res.value)[0],
-                    estado: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Estado')).map(res => res.value)[0],
-                    cep: index.deal_custom_fields.filter(res => res.custom_field.label.includes('CEP')).map(res => res.value)[0],
-                    estadoCivil: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Estado civil responsável')).map(res => res.value)[0],
-                    profissao: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Profissão')).map(res => res.value)[0],
-                    email: index.contacts[0]?.emails[0]?.email,
-                    nomeAluno: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Nome do aluno')).map(res => res.value)[0],
-                    nascimentoAluno: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do aluno')).map(res => res.value)[0],
-                    formato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Formato de Aula')).map(res => res.value)[0],
-                    tipoModalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Tipo/ modalidade')).map(res => res.value)[0],
-                    classe: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Classe')).map(res => res.value)[0],
-                    subclasse: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Subclasse')).map(res => res.value)[0],
-                    cargaHoraria: `${index.deal_custom_fields.filter(res => res.custom_field.label.includes('Carga horário do curso')).map(res => res.value)}`,
-                    paDATA: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data da primeira aula')).map(res => res.value)[0],
-                    valorMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value)[0],
-                    numeroParcelas: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número de parcelas')).map(res => res.value)[0],
-                    diaVenvimento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da primeira parcela')).map(res => res.value)[0],
-                    dataPrimeiraParcelaMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da primeira parcela')).map(res => res.value)[0],
-                    dataUltimaParcelaMensalidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de vencimento da última parcela')).map(res => res.value)[0],
-                    descontoTotal: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Desconto total')).map(res => res.value)[0],
-                    primeiraParcelaComDesconto: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do desconto de pontualidade por parcela')).map(res => res.value)[0],
-                    valorParcela: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value)[0],
-                    testemunha1: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Testemunha 01')).map(res => res.value)[0],
-                    testemunha2: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Testemunha 2')).map(res => res.value)[0],
-
-
-                }
-                array.push(body)
-            }
-            // console.log(array)
-        })
-
-}
-kk()
 
 
