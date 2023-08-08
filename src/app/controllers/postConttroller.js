@@ -26,7 +26,6 @@ class PostController {
 
         axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`)
             .then(response => {
-
                 const array = []
                 for (const index of response?.data?.deals) {
                     const body = {

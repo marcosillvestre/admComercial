@@ -23,12 +23,12 @@ const startDate = sstartDate.toISOString()
 const eendDate = new Date()
 const endDate = eendDate.toISOString()
 
-
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
 
     axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
+
             const array = []
             for (const index of response?.data?.deals) {
                 const body = {
@@ -185,7 +185,9 @@ async function searchSync() {
                         })
 
                     } catch (error) {
-                        console.log(error)
+                        if (error) {
+                            console.log(new Date().toISOString())
+                        }
                     }
                 })
 
