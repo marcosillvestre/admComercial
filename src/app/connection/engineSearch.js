@@ -6,7 +6,7 @@ import "dotenv/config";
 const prisma = new PrismaClient()
 
 const job = new CronJob(
-    '0 */60 * * * *',
+    '0 */30 * * * *',
 
     function () {
         searchSync()
@@ -28,7 +28,6 @@ async function searchSync() {
 
     axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
-
             const array = []
             for (const index of response?.data?.deals) {
                 const body = {
@@ -193,8 +192,6 @@ async function searchSync() {
 
             }
         })
-        .catch(err => console.error(err));
-
 }
 
 
