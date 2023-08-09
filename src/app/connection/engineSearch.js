@@ -26,7 +26,7 @@ const endDate = eendDate.toISOString()
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
 
-    axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
+    await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
             const array = []
             for (const index of response?.data?.deals) {
@@ -54,7 +54,7 @@ async function searchSync() {
                     acFormato: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Tipo de assinatura')).map(res => res.value)[0],
                     acStatus: "Pendente",
                     tmValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor de taxa de matrícula')).map(res => res.value)[0],
-                    tmVencimento: index.deal_custom_fields.filter(res => res.custom_field.label.includes()).map(res => res.value)[0],
+                    tmVencimento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de pagamento TM')).map(res => res.value),
                     tmStatus: "Pendente",
                     ppVencimento: "",
                     mdValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do material didático')).map(res => res.value)[0],
