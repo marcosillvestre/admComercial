@@ -89,11 +89,11 @@ async function searchSync() {
                     tmFormaPg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Forma de pagamento TM')).map(res => res.value)[0],
                     tmParcelas: "",
                     tmData: "",
-                    ppDesconto: "",
+                    ppDesconto: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do desconto de pontualidade por parcela')).map(res => res.value),
                     ppFormaPg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Forma de pagamento da parcela')).map(res => res.value)[0],
-                    ppParcelas: "",
+                    ppParcelas: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número de parcelas')).map(res => res.value),
                     ppData: "",
-                    ppValor: "",
+                    ppValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value),
                     mdDesconto: "",
                     mdFormaPg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Forma de pagamento do MD')).map(res => res.value)[0],
                     mdParcelas: "",
@@ -169,11 +169,11 @@ async function searchSync() {
                                 tmFormaPg: res['tmFormaPg'] || "",
                                 tmParcelas: "", //nao tem 
                                 tmData: "",
-                                ppDesconto: "", //nao tem
+                                ppDesconto: res['ppDesconto'], //nao tem
                                 ppFormaPg: "", // nao tem 
-                                ppParcelas: "", // nao tem
+                                ppParcelas: res["ppParcelas"], // nao tem
                                 ppData: "",
-                                ppValor: "", //nao tem
+                                ppValor: res['ppValor'], //nao tem
                                 mdDesconto: "", //nao tem,
                                 mdFormaPg: res['mdFormaPg'] || "",
                                 mdParcelas: "", //nao tem
