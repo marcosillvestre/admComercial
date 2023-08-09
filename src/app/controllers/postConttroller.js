@@ -1,30 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import axios from 'axios';
+import { funis } from "../../utils/funnels.js";
+import { stages } from "../../utils/stage.js";
 const prisma = new PrismaClient()
 const sstartDate = new Date()
 sstartDate.setDate(sstartDate.getDate() - 1)
 const startDate = sstartDate.toISOString()
-
 const eendDate = new Date()
 const endDate = eendDate.toISOString()
 class PostController {
 
     async getRecent(req, res) {
-
-        const ptb = "63602cabdef82800153ec290"
-        const matriculaPtb = "63602cabdef82800153ec295"
-
-        const centro = "64bad548430b870026994c8c"
-        const matriculaCentro = "64bad548430b870026994c91"
-
-
         const { unity } = req.params
 
-        const unidade = unity === "ptb" ? ptb : centro
-        const etapa = unity === "ptb" ? matriculaPtb : matriculaCentro
-
-
-        await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${unidade}&deal_stage_id=${etapa}`)
+        await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${funis[unity]}&deal_stage_id=${stages[unity]}`)
             .then(response => {
 
                 const array = []
