@@ -17,7 +17,7 @@ const job = new CronJob(
 )
 
 const sstartDate = new Date()
-sstartDate.setDate(sstartDate.getDate() - 1)
+sstartDate.setDate(sstartDate.getDate() - 30)
 const startDate = sstartDate.toISOString()
 
 const eendDate = new Date()
@@ -94,11 +94,11 @@ async function searchSync() {
                     tmDesconto: "",
                     tmParcelas: "",
                     tmData: "",
-                    ppDesconto: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do desconto de pontualidade por parcela')).map(res => res.value),
+                    ppDesconto: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor do desconto de pontualidade por parcela')).map(res => res.value)[0],
                     ppFormaPg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Forma de pagamento da parcela')).map(res => res.value)[0],
-                    ppParcelas: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número de parcelas')).map(res => res.value),
+                    ppParcelas: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número de parcelas')).map(res => res.value)[0],
                     ppData: "",
-                    ppValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value),
+                    ppValor: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Valor total da parcela')).map(res => res.value)[0],
                     mdDesconto: "",
 
                     mdFormaPg: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Forma de pagamento do MD')).map(res => res.value)[0],
@@ -200,5 +200,3 @@ async function searchSync() {
             }
         })
 }
-
-
