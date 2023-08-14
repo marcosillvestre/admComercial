@@ -17,7 +17,7 @@ const job = new CronJob(
 )
 
 const sstartDate = new Date()
-sstartDate.setDate(sstartDate.getDate() - 30)
+sstartDate.setDate(sstartDate.getDate() - 2)
 const startDate = sstartDate.toISOString()
 
 const eendDate = new Date()
