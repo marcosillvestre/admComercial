@@ -15,6 +15,7 @@ class PostController {
 
         await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${funis[unity]}&deal_stage_id=${stages[unity]}`)
             .then(response => {
+                console.log(response.data.deals[0].deal_custom_fields)
                 const array = []
                 for (const index of response?.data?.deals) {
                     const body = {
@@ -29,7 +30,7 @@ class PostController {
                         cpf: index.deal_custom_fields.filter(res => res.custom_field.label.includes('CPF')).map(res => res.value)[0],
                         DatadeNascdoResp: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do  responsável')).map(res => res.value)[0],
                         CelularResponsavel: index.contacts[0]?.phones[0]?.phone,
-                        EnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Rua')).map(res => res.value)[0],
+                        EnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Endereço')).map(res => res.value)[0],
                         NumeroEnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número')).map(res => res.value)[0],
                         complemento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Complemento')).map(res => res.value)[0],
                         bairro: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Bairro')).map(res => res.value)[0],
