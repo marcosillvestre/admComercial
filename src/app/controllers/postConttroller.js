@@ -119,21 +119,24 @@ class PostController {
         const Status = {
             body1, body2, body3, body4
         }
-        console.log(Status)
         const newArr = []
 
         await prisma.person.findFirst({ where: { email: email1 } }).then(async res => {
 
             newArr.push(Status)
-            console.log(res)
+            try {
+                await prisma.person.update({
+                    where: { contrato: res.contrato },
+                    data: {
+                        "dataAC": newArr
+                    }
+                }).then(() => console.log("Success"))
 
-            await prisma.person.update({
-                where: { contrato: res[0].contrato },
-                data: {
-                    "dataAC": newArr
+            } catch (error) {
+                if (error) {
+                    console.log("Something went wrong")
                 }
-            }).then(() => console.log("Success"))
-                .catch(err => err && console.log('Something went wrong'))
+            }
         })
 
         return res.status(200).json({ message: "worked" })
@@ -172,4 +175,3 @@ class PostController {
 }
 
 export default new PostController()
-
