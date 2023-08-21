@@ -128,7 +128,7 @@ class PostController {
             console.log(res)
 
             await prisma.person.update({
-                where: { contrato: res.contrato },
+                where: { contrato: res[0].contrato },
                 data: {
                     "dataAC": newArr
                 }
