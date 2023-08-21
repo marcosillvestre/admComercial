@@ -80,19 +80,19 @@ class PostController {
 
         const name1 = obj['partes[0][nome]']?.split(" ")[0]
         const email1 = obj['partes[0][email]']
-        const signed1 = obj['partes[0][assinado][created]']?.split(" ")[0]
+        const signed1 = obj['partes[0][assinado][created]']?.split("+")[0]
 
         const name2 = obj['partes[1][nome]']?.split(" ")[0]
         const email2 = obj['partes[1][email]']
-        const signed2 = obj['partes[1][assinado][created]']?.split(" ")[0]
+        const signed2 = obj['partes[1][assinado][created]']?.split("+")[0]
 
         const name3 = obj['partes[2][nome]']?.split(" ")[0]
         const email3 = obj['partes[2][email]']
-        const signed3 = obj['partes[2][assinado][created]']?.split(" ")[0]
+        const signed3 = obj['partes[2][assinado][created]']?.split("+")[0]
 
         const name4 = obj['partes[3][nome]']?.split(" ")[0]
         const email4 = obj['partes[3][email]']
-        const signed4 = obj['partes[3][assinado][created]']?.split(" ")[0]
+        const signed4 = obj['partes[3][assinado][created]']?.split("+")[0]
 
 
         const body1 = {
@@ -125,7 +125,7 @@ class PostController {
         await prisma.person.findFirst({ where: { email: email1 } }).then(async res => {
 
             newArr.push(Status)
-
+            console.log(res)
 
             await prisma.person.update({
                 where: { contrato: res.contrato },
@@ -133,9 +133,10 @@ class PostController {
                     "dataAC": newArr
                 }
             }).then(() => console.log("Success"))
+                .catch(err => err && console.log('Something went wrong'))
         })
 
-        return res.status(200).json({ message: "funcinou" })
+        return res.status(200).json({ message: "worked" })
     }
 
     async update(req, res) {
