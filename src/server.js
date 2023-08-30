@@ -1,7 +1,6 @@
 import cors from 'cors'
 import express from 'express'
 import '../src/app/connection/engineSearch.js'
-import '../src/app/connection/sync.js'
 import routes from './routes/routes.js'
 class App {
     constructor() {
