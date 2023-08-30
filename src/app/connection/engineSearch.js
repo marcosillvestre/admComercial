@@ -9,7 +9,7 @@ const job = new CronJob(
     '0 */60 * * * *',
 
     function () {
-        searchSync()
+        searchSync();
     },
     null,
     true,
@@ -23,6 +23,9 @@ const startDate = sstartDate.toISOString()
 const eendDate = new Date()
 const endDate = eendDate.toISOString()
 
+searchSync()
+
+
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
 
@@ -30,6 +33,7 @@ async function searchSync() {
         .then(async response => {
             const array = []
             for (const index of response?.data?.deals) {
+
                 const body = {
                     name: index.name,
                     owner: index.user.name,
@@ -117,14 +121,14 @@ async function searchSync() {
                         await prisma.person.create({
                             data: {
                                 name: res['name'] || "",
-                                owner: res['owner'] || "", // nao tem 
+                                owner: res['owner'] || "", // 
                                 unidade: res['unidade'] || "",
                                 background: res['background'] || "",
                                 tipoMatricula: "Pendente",
                                 tipoComissao: "Pendente",
                                 comissaoValor: "Pendente",
                                 diretorResponsavel: "Pendente",
-                                Valor: res['Valor'] || 0.0,  //nao tem 
+                                Valor: res['Valor'] || 0.0,  //
                                 id: parseInt(res['id']),
                                 situMatric: "Pendente",
                                 paStatus: "Pendente",
@@ -134,19 +138,19 @@ async function searchSync() {
                                 aprovacaoADM: "Pendente",
                                 aprovacaoDirecao: "Pendente",
                                 contrato: res['contrato'] || "",
-                                inicioContrato: res['inicioContrato'] || "", // nao tem 
-                                fimContrato: res['fimContrato'] || "", // nao tem 
+                                inicioContrato: res['inicioContrato'] || "", // 
+                                fimContrato: res['fimContrato'] || "", // 
                                 acFormato: res['acFormato'] || "",
                                 acStatus: "Pendente",
                                 tmValor: res['tmValor'] || "",
                                 tmVencimento: res['tmVencimento'] || "",
                                 tmStatus: "Pendente",
                                 ppVencimento: res['ppVencimento'] || "",
-                                mdValor: res['mdValor'] || "", // nao tem 
+                                mdValor: res['mdValor'] || "", // 
                                 mdStatus: "Pendente",
                                 aluno: res['aluno'] || "",
-                                tel: res['tel'][0] || "", //nao tem 
-                                email: res['email'][0] || "", //nao tem 
+                                tel: res['tel'][0] || "", //
+                                email: res['email'][0] || "", //
                                 paDATA: res['paDATA'] || "",
                                 classe: res['classe'] || "",
                                 subclasse: res['subclasse'] || "",
@@ -172,18 +176,18 @@ async function searchSync() {
                                 dataComissionamento: "",
                                 contratoStatus: "Pendente",
                                 cargaHoraria: `${res['cargaHoraria']}`,
-                                tmDesconto: "", // nao tem
+                                tmDesconto: "", // 
                                 tmFormaPg: res['tmFormaPg'] || "",
-                                tmParcelas: "", //nao tem 
+                                tmParcelas: "", //
                                 tmData: "",
-                                ppDesconto: res['ppDesconto'], //nao tem
-                                ppFormaPg: "", // nao tem 
-                                ppParcelas: res["ppParcelas"], // nao tem
+                                ppDesconto: res['ppDesconto'], //
+                                ppFormaPg: "", // 
+                                ppParcelas: res["ppParcelas"], // 
                                 ppData: "",
-                                ppValor: res['ppValor'], //nao tem
-                                mdDesconto: "", //nao tem,
+                                ppValor: res['ppValor'], //
+                                mdDesconto: "", //,
                                 mdFormaPg: res['mdFormaPg'] || "",
-                                mdParcelas: "", //nao tem
+                                mdParcelas: "", //
                                 mdData: "",
                                 mdVencimento: res['mdVencimento'] || "",
                                 comissaoStatus: "Pendente",
