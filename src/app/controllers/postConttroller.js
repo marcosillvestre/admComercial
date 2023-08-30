@@ -30,7 +30,7 @@ class PostController {
                         DatadeNascdoResp: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Data de nascimento do  responsável')).map(res => res.value)[0],
                         CelularResponsavel: index.contacts[0]?.phones[0]?.phone,
                         EnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Endereço')).map(res => res.value)[0],
-                        NumeroEnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Número')).map(res => res.value)[0],
+                        NumeroEnderecoResponsavel: index.deal_custom_fields.filter(res => res.custom_field.label === 'Número').map(res => res.value)[0],
                         complemento: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Complemento')).map(res => res.value)[0],
                         bairro: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Bairro')).map(res => res.value)[0],
                         cidade: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Cidade')).map(res => res.value)[0],
