@@ -23,8 +23,6 @@ const startDate = sstartDate.toISOString()
 const eendDate = new Date()
 const endDate = eendDate.toISOString()
 
-searchSync()
-
 
 async function searchSync() {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
