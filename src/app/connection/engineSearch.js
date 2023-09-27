@@ -112,6 +112,7 @@ async function searchSync() {
                 }
 
                 array.push(body)
+
             }
             if (array) {
                 array.map(async res => {
@@ -198,7 +199,104 @@ async function searchSync() {
                         }
                     }
                 })
-
             }
+
         })
 }
+
+
+
+
+// id: 19296114,
+// accountId: 354646,
+// organization: null,
+// person: {
+// id: 44647139,
+// name: 'Aline Lourenço Vasconcelos Rocha',
+// email: 'alinecesar2010@hotmail.com'
+// },
+// author: { accountId: 354646, id: 720504, name: 'Louryane Vianey Sandes' },
+// dealStage: {
+// id: 2745808,
+// name: 'Plano Financeiro',
+// sequence: 5,
+// funnel: { id: 624236, name: 'Funil de Venda - Centro' }
+// },
+// dealStatus: { id: 2, name: 'Ganho' },
+// lossReason: null,
+// owner: { accountId: 354646, id: 720504, name: 'Louryane Vianey Sandes' },
+// title: '1902 - Aline Lourenço Vasconcelos Rocha',
+// description: 'Matricula: R$50,00<br />Material: R$171,90<br />Parcela: R$165-R$149',
+// startTime: '2023-06-20T00:00:00.000Z',
+// endTime: '2023-06-29T00:00:00.000Z',
+// wonAt: '2023-07-25T20:12:34.000Z',
+// lostAt: null,
+// createdAt: '2023-06-28T19:13:19.000Z',
+// updatedAt: '2023-07-25T20:12:34.000Z',
+// ranking: 0,
+// value: 2970,
+// products: [
+// {
+// id: 651626,
+// name: 'Fluency Way Class - Kids',
+// code: 'FWCK',
+// category: 'Fluency Way Class',
+// categoryId: 6726,
+// price: 3296,
+// active: true,
+// createdAt: '2023-01-15T20:36:17.000Z'
+// }
+// ],
+// allowedUsers: [
+// { accountId: 354646, id: 430751, name: 'Victor' },
+// { accountId: 354646, id: 621908, name: 'Recepção' },
+// { accountId: 354646, id: 706675, name: 'Financeiro' },
+// { accountId: 354646, id: 720504, name: 'Louryane Vianey Sandes' },
+// {
+// accountId: 354646,
+// id: 732382,
+// name: 'Aracelly Nascimento de Gois'
+// }
+// ],
+// _email: '1902-354646n19296114@to.agendor.com.br',
+// customFields: {
+// valor_da_primeira_parcela: '149.0',
+// valor_da_parcela_apos_pp: '149.0',
+// parcela_forma_de_pagamento: { id: 2069, value: 'Pix Cobrança' },
+// parcela_dia_de_vencimento: { id: 2077, value: '25' },
+// data_de_vencimento_da_primeira: '25/07/2023',
+// data_de_vencimento_da_ultima_p: '25/12/2024',
+// n_de_parcelas: { id: 4458, value: '18' },
+// desconto_total_pontualidade: '288.0',
+// tm_valor_ex_150_00: '50.0',
+// tm_forma_de_pagamento: { id: 2225, value: 'Pix - Pagamento Instantâneo' },
+// tm_data_de_pagamento: '30/06/2023',
+// data_de_emissao_da_venda: '28/06/2023',
+// md_valor_ex_300_00: '171.9',
+// md_forma_de_pagamento: { id: 2211, value: 'Pix - Pagamento Instantâneo' },
+// md_data_de_pagamento: '30/07/2023',
+// nome_do_aluno: 'Laura Patrícia Lourenço Vasconcelos ',
+// data_de_nascimento_do_aluno: '17/02/2016',
+// background_do_aluno: { id: 2160, value: 'Novo Aluno' },
+// idade_do_aluno: 7,
+// possui_conhecimento_no_idioma: { id: 2171, value: 'Nao' },
+// precisa_de_nivelamento: { id: 2173, value: 'Nao' },
+// horario_de_inicio_ex_9_00: '08;30',
+// horario_do_fim_ex_10_00: '10:30',
+// classe: { id: 2192, value: 'Fluency Way – Class' },
+// subclasse: { id: 2096, value: 'SUB. 1: Kids' },
+// tipo_modalidade: { id: 2092, value: 'Em Grupo' },
+// formato_de_aula: { id: 2113, value: 'Presencial' },
+// curso: { id: 2115, value: 'Inglês' },
+// data_da_primeira_aula: '04/07/2023',
+// n_do_contrato: 'C280623',
+// carga_horaria_do_curso: 135,
+// unidade: { id: 2197, value: 'Centro' },
+// tipo_de_plano: { id: 2391, value: 'Único' },
+// testemunha_01: { id: 4049, value: 'louryane.americanway@gmail.com' },
+// testemunha_02: { id: 4060, value: 'financeiro.amwaycentro@outlook.com' },
+// metodo_de_assinatura: { id: 4721, value: 'Online' },
+// material_didatico: [[Object]],
+// dia_de_aula: [[Object]],
+// professor: [[Object]]
+// },

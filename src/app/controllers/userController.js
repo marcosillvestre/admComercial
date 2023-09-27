@@ -1,7 +1,7 @@
 
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import * as Yup from 'yup'
-import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 class UserController {
@@ -43,7 +43,6 @@ class UserController {
             }
 
         } catch (error) {
-            console.log(error)
             return res.status(401).json({ error })
         }
         return res.status(201).json({ name, email })

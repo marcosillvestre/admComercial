@@ -145,6 +145,7 @@ class PostController {
         const { area, value, day, responsible } = req.body
         const { id } = req.params
 
+        console.log(area)
 
         await prisma.person.update({
             where: { contrato: id },
@@ -155,8 +156,10 @@ class PostController {
 
             }
         }).then(() => {
+            console.log("first")
             return res.status(200).json("Success")
-        }).catch(() => {
+        }).catch((error) => {
+            console.log(error)
             return res.status(200).json("Error")
         }
         )

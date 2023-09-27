@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model conec {
+  id              Int         @id @default(autoincrement())
+  access_token    String 
+  refresh_token   String
+}
+
+
 model login {
   id       Int      @id @default(autoincrement())
   name     String
@@ -84,4 +91,5 @@ model person {
   diaAula             String[]
   comissaoStatus      String
   professor           String[]
+  curso               String
 }
