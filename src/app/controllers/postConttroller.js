@@ -2,12 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import axios from 'axios';
 import { funis } from "../../utils/funnels.js";
 import { stages } from "../../utils/stage.js";
+
 const prisma = new PrismaClient()
-const sstartDate = new Date()
-sstartDate.setDate(sstartDate.getDate() - 1)
-const startDate = sstartDate.toISOString()
-const eendDate = new Date()
-const endDate = eendDate.toISOString()
+
 class PostController {
 
     async getRecent(req, res) {
@@ -145,7 +142,6 @@ class PostController {
         const { area, value, day, responsible } = req.body
         const { id } = req.params
 
-        console.log(area)
 
         await prisma.person.update({
             where: { contrato: id },
@@ -156,16 +152,15 @@ class PostController {
 
             }
         }).then(() => {
-            console.log("first")
             return res.status(200).json("Success")
-        }).catch((error) => {
-            console.log(error)
+        }).catch(() => {
             return res.status(200).json("Error")
         }
         )
 
 
     }
+
     async delete(req, res) {
         const { id } = req.params
         await prisma.person.delete({ where: { contrato: id } })
