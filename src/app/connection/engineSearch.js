@@ -6,7 +6,7 @@ import "dotenv/config";
 const prisma = new PrismaClient()
 
 const job = new CronJob(
-    '0 */1 * * * *',
+    '0 */60 * * * *',
 
     function () {
         searchSync();
