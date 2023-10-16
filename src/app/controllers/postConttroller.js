@@ -65,11 +65,6 @@ class PostController {
 
     }
 
-    async index(req, res) {
-        const findAll = await prisma.person.findMany()
-        return res.status(200).json(findAll)
-    }
-
     async sender(req, res) {
         const str = JSON.stringify(req.body)
         const obj = JSON.parse(str)
@@ -130,7 +125,7 @@ class PostController {
 
             } catch (error) {
                 if (error) {
-                    console.log("Something went wrong")
+                    console.log("Contrato não encontrado")
                 }
             }
         })
@@ -168,6 +163,69 @@ class PostController {
                 return res.status(201).json({ message: "deletado com sucesso" })
             })
 
+    }
+
+    async index(req, res) {
+        const findAll = await prisma.person.findMany()
+        return res.status(200).json(findAll)
+    }
+
+    async indexPeriod(req, res) {
+        const { range, role, name, unity } = req.body
+
+        const period = {
+            "Esta semana": 7,
+            "Este mês": 30,
+            "Mês passado": 60,
+            "Últimos 3 meses": 90,
+            "Este ano": 365,
+            "Período personalizado": 0,
+        }
+
+        const currentDay = new Date()
+
+        const periodDate = new Date(currentDay.setDate(currentDay.getDate() - period[range]))
+
+
+        const allData = await prisma.person.findMany()
+
+        const generalRangePeriod = allData?.filter(res => {
+            const date = res.dataMatricula.split("/")
+            return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
+        })
+
+        const sellersRangePeriod = allData?.filter(res => {
+            const date = res.dataMatricula.split("/")
+            return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate && res.owner.toLowerCase().includes(name.toLowerCase())
+        })
+
+        if (role === 'comercial') {
+            return res.status(200).json({
+                data: {
+                    total: sellersRangePeriod.length,
+                    deals: sellersRangePeriod
+                }
+            })
+        }
+
+        if (role === 'administrativo' && unity.length >= 1 || role === 'gerencia' && unity.length >= 1) {
+            const filteredByUnity = generalRangePeriod.filter(res => res.unidade === unity[0] || res.unidade === unity[1] || res.unidade === unity[2])
+            return res.status(200).json({
+                data: {
+                    total: filteredByUnity.length,
+                    deals: filteredByUnity
+                }
+            })
+        }
+
+        if (role !== 'administrativo' || role === 'administrativo' && unity[0] === 'Todas') {
+            return res.status(200).json({
+                data: {
+                    total: generalRangePeriod.length,
+                    deals: generalRangePeriod
+                }
+            })
+        }
     }
 }
 

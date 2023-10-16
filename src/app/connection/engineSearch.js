@@ -9,19 +9,21 @@ const job = new CronJob(
     '0 */60 * * * *',
 
     function () {
-        searchSync();
+        // searchSync();
     },
     null,
     true,
     'America/Los_Angeles'
 )
 
-const sstartDate = new Date()
-sstartDate.setDate(sstartDate.getDate() - 2)
-const startDate = sstartDate.toISOString()
+const lastTwoDay = new Date()
+lastTwoDay.setDate(lastTwoDay.getDate() - 2)
+const startDate = lastTwoDay.toISOString()
 
-const eendDate = new Date()
-const endDate = eendDate.toISOString()
+const currentDate = new Date()
+const endDate = currentDate.toISOString()
+
+//
 
 
 async function searchSync() {
@@ -114,7 +116,6 @@ async function searchSync() {
                     curso: index.deal_custom_fields.filter(res => res.custom_field.label.includes('Curso')).map(res => res.value)[0],
 
                 }
-                console.log(body.name)
                 array.push(body)
                 count++
             }
@@ -212,4 +213,5 @@ async function searchSync() {
 
         })
 }
+
 
