@@ -148,7 +148,8 @@ class PostController {
             }
         }).then(() => {
             return res.status(200).json("Success")
-        }).catch(() => {
+        }).catch((error) => {
+            console.log(error)
             return res.status(200).json("Error")
         }
         )
