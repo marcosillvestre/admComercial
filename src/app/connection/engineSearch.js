@@ -9,7 +9,7 @@ const job = new CronJob(
     '0 */60 * * * *',
 
     function () {
-        // searchSync();
+        searchSync();
     },
     null,
     true,
@@ -22,8 +22,6 @@ const startDate = lastTwoDay.toISOString()
 
 const currentDate = new Date()
 const endDate = currentDate.toISOString()
-
-//
 
 
 async function searchSync() {
