@@ -60,7 +60,6 @@ class PostController {
                     array.push(body)
                 }
                 return res.status(200).json(array)
-
             })
 
     }
@@ -144,7 +143,6 @@ class PostController {
                 [area]: value,
                 dataValidacao: day,
                 responsavelADM: responsible
-
             }
         }).then(() => {
             return res.status(200).json("Success")
@@ -172,61 +170,255 @@ class PostController {
     }
 
     async indexPeriod(req, res) {
-        const { range, role, name, unity } = req.body
+        const { range, role, name, unity, dates, types } = req.body
 
-        const period = {
+        const settledPeriod = {
+            "Mês passado": 1, //
+            "Mês retrasado": 2, //
+            "Período personalizado": 0,//
+        }
+        const rangePeriod = {
             "Esta semana": 7,
             "Este mês": 30,
-            "Mês passado": 60,
-            "Últimos 3 meses": 90,
             "Este ano": 365,
-            "Período personalizado": 0,
         }
 
+        const dbData = await prisma.person.findMany()
         const currentDay = new Date()
 
-        const periodDate = new Date(currentDay.setDate(currentDay.getDate() - period[range]))
 
+        if (rangePeriod[range] !== undefined) {
+            const periodDate = new Date(currentDay.setDate(currentDay.getDate() - rangePeriod[range]))
 
-        const allData = await prisma.person.findMany()
-
-        const generalRangePeriod = allData?.filter(res => {
-            const date = res.dataMatricula.split("/")
-            return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
-        })
-
-        const sellersRangePeriod = allData?.filter(res => {
-            const date = res.dataMatricula.split("/")
-            return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate && res.owner.toLowerCase().includes(name.toLowerCase())
-        })
-
-        if (role === 'comercial') {
-            return res.status(200).json({
-                data: {
-                    total: sellersRangePeriod.length,
-                    deals: sellersRangePeriod
-                }
+            const generalRangePeriod = dbData?.filter(res => {
+                const date = res[types].split("/")
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
             })
-        }
 
-        if (role === 'administrativo' && unity.length >= 1 || role === 'gerencia' && unity.length >= 1) {
-            const filteredByUnity = generalRangePeriod.filter(res => res.unidade === unity[0] || res.unidade === unity[1] || res.unidade === unity[2])
+            if (role === 'comercial') {
+                const sellerRanges = generalRangePeriod.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: sellerRanges.length,
+                        deals: sellerRanges
+                    }
+                })
+            }
+
             return res.status(200).json({
                 data: {
-                    total: filteredByUnity.length,
-                    deals: filteredByUnity
-                }
-            })
-        }
-
-        if (role !== 'administrativo' || role === 'administrativo' && unity[0] === 'Todas') {
-            return res.status(200).json({
-                data: {
+                    period: range,
                     total: generalRangePeriod.length,
                     deals: generalRangePeriod
                 }
             })
+
         }
+
+        if (settledPeriod[range] === 0) {
+            const mixedDates = dates.split("~")
+
+            const generalRangeDates = dbData?.filter(res => {
+                const date = res[types].split("/")
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+                    new Date(mixedDates[0]) &&
+                    new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+                    new Date(mixedDates[1])
+            })
+
+            if (role === 'comercial') {
+                const sellerRanges = generalRangeDates.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: sellerRanges.length,
+                        deals: sellerRanges
+                    }
+                })
+            }
+
+            return res.status(200).json({
+                data: {
+                    period: range,
+                    total: generalRangeDates.length,
+                    deals: generalRangeDates
+                }
+            })
+        }
+
+        if (settledPeriod[range] === 1 || settledPeriod[range] === 2) {
+            const dataAtual = new Date(); // Obtém a data atual.
+            const firstDayLastMonth = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+
+            // Agora, para obter o primeiro dia do mês passado, subtraímos um mês do primeiro dia do mês atual.
+            firstDayLastMonth.setMonth(firstDayLastMonth.getMonth() - settledPeriod[range]);
+
+            const diaDeHoje = new Date(); // Obtém a data atual.
+            const diaPrimeiroDesseMes = new Date(diaDeHoje.getFullYear(), diaDeHoje.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+
+            // Agora, para obter o último dia do mês passado, subtraímos um dia do primeiro dia do mês atual.
+            const primeiroDiaDoMesPassado = new Date(diaPrimeiroDesseMes);
+
+
+            primeiroDiaDoMesPassado.setMonth(primeiroDiaDoMesPassado.getMonth() - settledPeriod[range]);
+            const lastDayLastMonth = new Date(primeiroDiaDoMesPassado);
+            lastDayLastMonth.setMonth(lastDayLastMonth.getMonth() + 1);
+            lastDayLastMonth.setDate(0);
+
+
+            const generalMonthsBefore = dbData?.filter(res => {
+                const date = res[types].split("/")
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+                    firstDayLastMonth &&
+                    new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+                    lastDayLastMonth
+            })
+
+            if (role === 'comercial') {
+                const sellerRanges = generalMonthsBefore.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: sellerRanges.length,
+                        deals: sellerRanges
+                    }
+                })
+            }
+
+            return res.status(200).json({
+                data: {
+                    period: range,
+                    total: generalMonthsBefore.length,
+                    deals: generalMonthsBefore
+                }
+            })
+        }
+
+
+
+
+
+        //     switch (range) {
+        //         case "Mês passado" || "Mês retrasado":
+
+
+        //             break;
+
+        //         case range === "Mês passado" || range === "Mês retrasado" && role === 'comercial':
+
+        //             const sellerRanges = generalMonthsBefore.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+        //             return res.status(200).json({
+        //                 data: {
+        //                     period: range,
+        //                     total: sellerRanges.length,
+        //                     deals: sellerRanges
+        //                 }
+        //             })
+        //             break;
+
+        //         default:
+        //             return res.status(200).json({
+        //                 data: {
+        //                     period: range,
+        //                     total: generalMonthsBefore.length,
+        //                     deals: generalMonthsBefore
+        //                 }
+        //             })
+
+        //             break;
+        //     }
+
+
+        //     const mixedDates = dates.split("~")
+
+        //     const generalRangeDates = allData?.filter(res => {
+        //         const date = res[types].split("/")
+        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+        //             new Date(mixedDates[0]) &&
+        //             new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+        //             new Date(mixedDates[1])
+        //     })
+
+        //     switch (period[range]) {
+        //         case period[range] === 0 && role !== 'comercial':
+
+        //             return res.status(200).json({
+        //                 data: {
+        //                     period: range,
+        //                     total: generalRangeDates.length,
+        //                     deals: generalRangeDates
+        //                 }
+        //             })
+
+        //             break;
+        //         case period[range] === 0 && role === 'comercial':
+        //             const sellerRanges = generalRangeDates.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+
+        //             return res.status(200).json({
+        //                 data: {
+        //                     period: range,
+        //                     total: sellerRanges.length,
+        //                     deals: sellerRanges
+        //                 }
+        //             })
+
+        //             break;
+
+        //         default:
+        //             break;
+        //     }
+
+        //     const currentDay = new Date()
+
+        //     const periodDate = new Date(currentDay.setDate(currentDay.getDate() - period[range]))
+
+
+
+        //     const generalRangePeriod = allData?.filter(res => {
+        //         const date = res[types].split("/")
+        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
+        //     })
+
+        //     const sellersRangePeriod = allData?.filter(res => {
+        //         const date = res[types].split("/")
+        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate && res.owner.toLowerCase().includes(name.toLowerCase())
+        //     })
+
+
+
+
+
+        //     if (role === 'comercial') {
+        //         return res.status(200).json({
+        //             data: {
+        //                 period: range,
+        //                 total: sellersRangePeriod.length,
+        //                 deals: sellersRangePeriod
+        //             }
+        //         })
+        //     }
+
+        //     if (role === 'administrativo' && unity[0] !== "Todas" || role === 'gerencia' && unity[0] !== "Todas") {
+        //         const filteredByUnity = generalRangePeriod.filter(res => res.unidade === unity[0] || res.unidade === unity[1] || res.unidade === unity[2])
+        //         return res.status(200).json({
+        //             data: {
+        //                 period: range,
+        //                 total: filteredByUnity.length,
+        //                 deals: filteredByUnity
+        //             }
+        //         })
+        //     }
+
+        //     if (role !== 'administrativo' || role === 'administrativo' && unity[0] === 'Todas') {
+        //         return res.status(200).json({
+        //             data: {
+        //                 period: range,
+        //                 total: generalRangePeriod.length,
+        //                 deals: generalRangePeriod
+        //             }
+        //         })
+        //     }
     }
 }
 

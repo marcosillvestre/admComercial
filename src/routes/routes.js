@@ -7,18 +7,17 @@ import auth from "../middleware/auth.js";
 
 const routes = Router();
 
-const corsOptions = {
-    origin: "http://localhost:5173"
-}
+// const corsOptions = {
+//     origin: "http://localhost:5173"
+// }
 
 
 const parser = bodyParser.urlencoded({ extended: false })
 
-routes.post('/login', SessionController.store)
-
 routes.post('/contrato', parser, PostConttroller.sender)
-routes.post('/cadastro', UserController.store)
 
+routes.post('/login', SessionController.store)
+routes.post('/cadastro', UserController.store)
 
 routes.use(auth)
 //rotas que precisam de autenticação
