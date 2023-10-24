@@ -164,12 +164,8 @@ class PostController {
 
     }
 
-    async index(req, res) {
-        const findAll = await prisma.person.findMany()
-        return res.status(200).json(findAll)
-    }
-
     async indexPeriod(req, res) {
+
         const { range, role, name, unity, dates, types } = req.body
 
         const settledPeriod = {
@@ -295,130 +291,11 @@ class PostController {
             })
         }
 
+    }
 
-
-
-
-        //     switch (range) {
-        //         case "Mês passado" || "Mês retrasado":
-
-
-        //             break;
-
-        //         case range === "Mês passado" || range === "Mês retrasado" && role === 'comercial':
-
-        //             const sellerRanges = generalMonthsBefore.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-        //             return res.status(200).json({
-        //                 data: {
-        //                     period: range,
-        //                     total: sellerRanges.length,
-        //                     deals: sellerRanges
-        //                 }
-        //             })
-        //             break;
-
-        //         default:
-        //             return res.status(200).json({
-        //                 data: {
-        //                     period: range,
-        //                     total: generalMonthsBefore.length,
-        //                     deals: generalMonthsBefore
-        //                 }
-        //             })
-
-        //             break;
-        //     }
-
-
-        //     const mixedDates = dates.split("~")
-
-        //     const generalRangeDates = allData?.filter(res => {
-        //         const date = res[types].split("/")
-        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
-        //             new Date(mixedDates[0]) &&
-        //             new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
-        //             new Date(mixedDates[1])
-        //     })
-
-        //     switch (period[range]) {
-        //         case period[range] === 0 && role !== 'comercial':
-
-        //             return res.status(200).json({
-        //                 data: {
-        //                     period: range,
-        //                     total: generalRangeDates.length,
-        //                     deals: generalRangeDates
-        //                 }
-        //             })
-
-        //             break;
-        //         case period[range] === 0 && role === 'comercial':
-        //             const sellerRanges = generalRangeDates.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-
-        //             return res.status(200).json({
-        //                 data: {
-        //                     period: range,
-        //                     total: sellerRanges.length,
-        //                     deals: sellerRanges
-        //                 }
-        //             })
-
-        //             break;
-
-        //         default:
-        //             break;
-        //     }
-
-        //     const currentDay = new Date()
-
-        //     const periodDate = new Date(currentDay.setDate(currentDay.getDate() - period[range]))
-
-
-
-        //     const generalRangePeriod = allData?.filter(res => {
-        //         const date = res[types].split("/")
-        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
-        //     })
-
-        //     const sellersRangePeriod = allData?.filter(res => {
-        //         const date = res[types].split("/")
-        //         return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate && res.owner.toLowerCase().includes(name.toLowerCase())
-        //     })
-
-
-
-
-
-        //     if (role === 'comercial') {
-        //         return res.status(200).json({
-        //             data: {
-        //                 period: range,
-        //                 total: sellersRangePeriod.length,
-        //                 deals: sellersRangePeriod
-        //             }
-        //         })
-        //     }
-
-        //     if (role === 'administrativo' && unity[0] !== "Todas" || role === 'gerencia' && unity[0] !== "Todas") {
-        //         const filteredByUnity = generalRangePeriod.filter(res => res.unidade === unity[0] || res.unidade === unity[1] || res.unidade === unity[2])
-        //         return res.status(200).json({
-        //             data: {
-        //                 period: range,
-        //                 total: filteredByUnity.length,
-        //                 deals: filteredByUnity
-        //             }
-        //         })
-        //     }
-
-        //     if (role !== 'administrativo' || role === 'administrativo' && unity[0] === 'Todas') {
-        //         return res.status(200).json({
-        //             data: {
-        //                 period: range,
-        //                 total: generalRangePeriod.length,
-        //                 deals: generalRangePeriod
-        //             }
-        //         })
-        //     }
+    async index(req, res) {
+        const findAll = await prisma.person.findMany()
+        return res.status(200).json(findAll)
     }
 }
 

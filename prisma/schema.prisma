@@ -93,3 +93,8 @@ model person {
   professor           String[]
   curso               String
 }
+
+model unities {
+  id         String    @id @default(uuid())
+  name       String
+}
