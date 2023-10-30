@@ -135,9 +135,6 @@ class SessionsController {
         } else {
             return res.status(401).json({ message: "Codigo invalido ou expirado" })
         }
-
-
-
     }
 }
 
