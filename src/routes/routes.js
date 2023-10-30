@@ -20,6 +20,9 @@ routes.post('/contrato', parser, PostConttroller.sender)
 routes.post('/login', SessionController.store)
 routes.post('/cadastro', UserController.store)
 
+routes.post('/redefinir-senha', SessionController.forgetPassword)
+
+routes.post('/nova-senha', SessionController.redefinePassword)
 
 routes.use(auth)
 
