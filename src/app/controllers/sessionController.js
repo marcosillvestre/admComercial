@@ -71,17 +71,16 @@ class SessionsController {
                 port: 465,
                 secure: true,
                 auth: {
-                    user: "marcos.vinicius7170@gmail.com",
-                    pass: "krau svuh tgdv uumr"
+                    user: process.env.GMAIL_CLIENT,
+                    pass: process.env.TOKEN_GMAIL
                 }
             })
 
             transporter.sendMail({
-                from: "Marcos vinicius <marcos.vinicius7170@gmail.com>",
+                from: `American Way ${process.env.GMAIL_CLIENT}`,
                 to: email,
                 subject: `Recuperação de Senha: ${email_hash}`,
-                text: "Deu good",
-                html: "<h2>Esqueceu a senha?</h2> <p>Preencha o link com o código acima. Clique no link abaixo para redefini-la <a href=`https://controlecomercial.vercel.app/controle-comercial`>Clique aqui</a>"
+                html: "<h2>Esqueceu a senha?</h2> <p>Copie e cole esse 👆 código na página de recuperação de senha e redefina a sua senha </p>"
             })
 
             return res.status(200).json({ message: "Sucesso" })
