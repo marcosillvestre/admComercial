@@ -23,12 +23,11 @@ const startDate = lastTwoDay.toISOString()
 const currentDate = new Date()
 const endDate = currentDate.toISOString()
 
+const options = { method: 'GET', headers: { accept: 'application/json' } };
 
 async function searchSync() {
-    const options = { method: 'GET', headers: { accept: 'application/json' } };
 
     let count = 0
-
     await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
             const array = []
@@ -116,6 +115,7 @@ async function searchSync() {
                 }
                 array.push(body)
                 count++
+                console.log(body.name)
             }
             if (array) {
                 array.map(async res => {
@@ -194,13 +194,12 @@ async function searchSync() {
                                 mdVencimento: res['mdVencimento'] || "",
                                 curso: res['curso'] || "",
                                 comissaoStatus: "Pendente",
-
                             }
                         })
 
                     } catch (error) {
                         if (error.meta) {
-                            console.log(error.meta.target + count);
+                            console.log(count + " " + error.meta.target + " " + "de números identicos");
                         } else {
                             console.log(error)
                         }
@@ -211,4 +210,3 @@ async function searchSync() {
 
         })
 }
-
