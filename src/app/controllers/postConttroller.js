@@ -172,27 +172,27 @@ class PostController {
             "Mês passado": 1, //
             "Mês retrasado": 2, //
             "Período personalizado": 0,//
+            "Este mês": 3,
         }
         const rangePeriod = {
-            "Esta semana": 7,
-            "Este mês": 30,
+            "Últimos 7 dias": 7,
             "Este ano": 365,
         }
 
         const dbData = await prisma.person.findMany()
         const currentDay = new Date()
 
+        if (settledPeriod[range] === 3) {
+            const firstDayThisMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1);
 
-        if (rangePeriod[range] !== undefined) {
-            const periodDate = new Date(currentDay.setDate(currentDay.getDate() - rangePeriod[range]))
-
-            const generalRangePeriod = dbData?.filter(res => {
+            const generalMonthsBefore = dbData?.filter(res => {
                 const date = res[types].split("/")
-                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= firstDayThisMonth
             })
 
+
             if (role === 'comercial') {
-                const sellerRanges = generalRangePeriod.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                const sellerRanges = generalMonthsBefore.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
                 return res.status(200).json({
                     data: {
                         period: range,
@@ -205,47 +205,15 @@ class PostController {
             return res.status(200).json({
                 data: {
                     period: range,
-                    total: generalRangePeriod.length,
-                    deals: generalRangePeriod
+                    total: generalMonthsBefore.length,
+                    deals: generalMonthsBefore
                 }
             })
 
-        }
-
-        if (settledPeriod[range] === 0) {
-            const mixedDates = dates.split("~")
-
-            const generalRangeDates = dbData?.filter(res => {
-                const date = res[types].split("/")
-                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
-                    new Date(mixedDates[0]) &&
-                    new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
-                    new Date(mixedDates[1])
-            })
-
-            if (role === 'comercial') {
-                const sellerRanges = generalRangeDates.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-                return res.status(200).json({
-                    data: {
-                        period: range,
-                        total: sellerRanges.length,
-                        deals: sellerRanges
-                    }
-                })
-            }
-
-            return res.status(200).json({
-                data: {
-                    period: range,
-                    total: generalRangeDates.length,
-                    deals: generalRangeDates
-                }
-            })
         }
 
         if (settledPeriod[range] === 1 || settledPeriod[range] === 2) {
-            const dataAtual = new Date(); // Obtém a data atual.
-            const firstDayLastMonth = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+            const firstDayLastMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1); // Obtém o primeiro dia do mês atual.
 
             // Agora, para obter o primeiro dia do mês passado, subtraímos um mês do primeiro dia do mês atual.
             firstDayLastMonth.setMonth(firstDayLastMonth.getMonth() - settledPeriod[range]);
@@ -291,6 +259,65 @@ class PostController {
             })
         }
 
+        if (settledPeriod[range] === 0) {
+            const mixedDates = dates.split("~")
+
+            const generalRangeDates = dbData?.filter(res => {
+                const date = res[types].split("/")
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+                    new Date(mixedDates[0]) &&
+                    new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+                    new Date(mixedDates[1])
+            })
+
+            if (role === 'comercial') {
+                const sellerRanges = generalRangeDates.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: sellerRanges.length,
+                        deals: sellerRanges
+                    }
+                })
+            }
+
+            return res.status(200).json({
+                data: {
+                    period: range,
+                    total: generalRangeDates.length,
+                    deals: generalRangeDates
+                }
+            })
+        }
+
+        if (rangePeriod[range] !== undefined) {
+            const periodDate = new Date(currentDay.setDate(currentDay.getDate() - rangePeriod[range]))
+
+            const generalRangePeriod = dbData?.filter(res => {
+                const date = res[types].split("/")
+                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
+            })
+
+            if (role === 'comercial') {
+                const sellerRanges = generalRangePeriod.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: sellerRanges.length,
+                        deals: sellerRanges
+                    }
+                })
+            }
+
+            return res.status(200).json({
+                data: {
+                    period: range,
+                    total: generalRangePeriod.length,
+                    deals: generalRangePeriod
+                }
+            })
+
+        }
     }
 
     async index(req, res) {
