@@ -179,7 +179,11 @@ class PostController {
             "Este ano": 365,
         }
 
-        const dbData = await prisma.person.findMany()
+        const dbData = await prisma.person.findMany({
+            orderBy: {
+                name: 'asc',
+            },
+        })
         const currentDay = new Date()
 
         if (settledPeriod[range] === 3) {
@@ -321,8 +325,141 @@ class PostController {
     }
 
     async index(req, res) {
-        const findAll = await prisma.person.findMany()
+        const findAll = await prisma.person.findMany({
+            orderBy: {
+                name: 'asc',
+            },
+        })
         return res.status(200).json(findAll)
+    }
+
+    async comissionData(req, res) {
+        const selectedDbData = await prisma.person.findMany({
+            orderBy: {
+                name: 'asc',
+            },
+            select: {
+                name: true,
+                aluno: true,
+                curso: true,
+                tipoMatricula: true,
+                unidade: true,
+                dataMatricula: true
+            }
+        })
+
+        const { range, unity, dates } = req.body
+
+        const settledPeriod = {
+            "Mês passado": 1,
+            "Mês retrasado": 2,
+            "Período personalizado": 0,
+            "Este mês": 3,
+        }
+        const rangePeriod = {
+            "Últimos 7 dias": 7,
+            "Este ano": 365,
+        }
+
+        const currentDay = new Date()
+        try {
+
+            if (settledPeriod[range] === 3) {
+                const firstDayThisMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1);
+
+                const generalMonthsBefore = selectedDbData.filter(res => {
+                    const date = res["dataMatricula"].split("/")
+                    return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= firstDayThisMonth
+                })
+
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: generalMonthsBefore.length,
+                        deals: generalMonthsBefore
+                    }
+                })
+
+            }
+
+            if (settledPeriod[range] === 1 || settledPeriod[range] === 2) {
+                const firstDayLastMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+
+                // Agora, para obter o primeiro dia do mês passado, subtraímos um mês do primeiro dia do mês atual.
+                firstDayLastMonth.setMonth(firstDayLastMonth.getMonth() - settledPeriod[range]);
+
+                const diaDeHoje = new Date(); // Obtém a data atual.
+                const diaPrimeiroDesseMes = new Date(diaDeHoje.getFullYear(), diaDeHoje.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+
+                // Agora, para obter o último dia do mês passado, subtraímos um dia do primeiro dia do mês atual.
+                const primeiroDiaDoMesPassado = new Date(diaPrimeiroDesseMes);
+
+
+                primeiroDiaDoMesPassado.setMonth(primeiroDiaDoMesPassado.getMonth() - settledPeriod[range]);
+                const lastDayLastMonth = new Date(primeiroDiaDoMesPassado);
+                lastDayLastMonth.setMonth(lastDayLastMonth.getMonth() + 1);
+                lastDayLastMonth.setDate(0);
+
+
+                const generalMonthsBefore = selectedDbData.filter(res => {
+                    const date = res["dataMatricula"].split("/")
+                    return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+                        firstDayLastMonth &&
+                        new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+                        lastDayLastMonth
+                })
+
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: generalMonthsBefore.length,
+                        deals: generalMonthsBefore
+                    }
+                })
+            }
+
+            if (settledPeriod[range] === 0) {
+                const mixedDates = dates.split("~")
+
+                const generalRangeDates = selectedDbData.filter(res => {
+                    const date = res["dataMatricula"].split("/")
+                    return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
+                        new Date(mixedDates[0]) &&
+                        new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
+                        new Date(mixedDates[1])
+                })
+
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: generalRangeDates.length,
+                        deals: generalRangeDates
+                    }
+                })
+            }
+
+            if (rangePeriod[range] !== undefined) {
+                const periodDate = new Date(currentDay.setDate(currentDay.getDate() - rangePeriod[range]))
+
+                const generalRangePeriod = selectedDbData.filter(res => {
+                    const date = res["dataMatricula"].split("/")
+                    return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
+                })
+
+
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: generalRangePeriod.length,
+                        deals: generalRangePeriod
+                    }
+                })
+
+            }
+        } catch (error) {
+
+            return res.status(401).json({ Erro: "Tente novamente mais tarde, se o erro persistir entre em contato com o suporte " })
+        }
     }
 }
 

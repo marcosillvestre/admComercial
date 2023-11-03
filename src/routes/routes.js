@@ -24,7 +24,10 @@ routes.post('/redefinir-senha', SessionController.forgetPassword)
 
 routes.post('/nova-senha', SessionController.redefinePassword)
 
+
 routes.use(auth)
+
+routes.post('/comissao', PostConttroller.comissionData)
 
 routes.get('/', (req, res) => {
     res.send("hello world")
