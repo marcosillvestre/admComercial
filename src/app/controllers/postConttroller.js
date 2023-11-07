@@ -344,7 +344,8 @@ class PostController {
                 curso: true,
                 tipoMatricula: true,
                 unidade: true,
-                dataMatricula: true
+                dataMatricula: true,
+                owner: true
             }
         })
 
@@ -460,6 +461,70 @@ class PostController {
 
             return res.status(401).json({ Erro: "Tente novamente mais tarde, se o erro persistir entre em contato com o suporte " })
         }
+    }
+
+    async graphData(req, res) {
+
+        const { typeGraphic } = req.body
+
+        const selectedDbData = await prisma.person.findMany({
+            orderBy: {
+                name: 'asc',
+            },
+            select: {
+                curso: true,
+                tipoMatricula: true,
+                unidade: true,
+                dataMatricula: true,
+                owner: true
+            }
+        })
+        const filteringDateAndTypeForYou = (month, type, value) => {
+            if (value.length === 1) {
+                const parameter1 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[0])).length
+                return { parameter1 }
+            }
+            if (value.length === 2) {
+                const parameter1 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[0])).length
+                const parameter2 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[1])).length
+                return { parameter1, parameter2 }
+            }
+            if (value.length === 3) {
+                const parameter1 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[0])).length
+                const parameter2 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[1])).length
+                const parameter3 = selectedDbData.filter(res => res.dataMatricula.split("/")[1] === month
+                    && res[type].includes(value[2])).length
+                return { parameter1, parameter2, parameter3 }
+            }
+        }
+
+        if (typeGraphic.type !== 'vendas' && typeGraphic.value.length >= 1) {
+            let months = [
+                { name: "Jan", type: typeGraphic.type, fn: filteringDateAndTypeForYou('01', typeGraphic.type, typeGraphic.value) },
+                { name: "Fev", type: typeGraphic.type, fn: filteringDateAndTypeForYou('02', typeGraphic.type, typeGraphic.value) },
+                { name: "Mar", type: typeGraphic.type, fn: filteringDateAndTypeForYou('03', typeGraphic.type, typeGraphic.value) },
+                { name: "Abr", type: typeGraphic.type, fn: filteringDateAndTypeForYou('04', typeGraphic.type, typeGraphic.value) },
+                { name: "Mai", type: typeGraphic.type, fn: filteringDateAndTypeForYou('05', typeGraphic.type, typeGraphic.value) },
+                { name: "Jun", type: typeGraphic.type, fn: filteringDateAndTypeForYou('06', typeGraphic.type, typeGraphic.value) },
+                { name: "Jul", type: typeGraphic.type, fn: filteringDateAndTypeForYou('07', typeGraphic.type, typeGraphic.value) },
+                { name: "Ago", type: typeGraphic.type, fn: filteringDateAndTypeForYou('08', typeGraphic.type, typeGraphic.value) },
+                { name: "Set", type: typeGraphic.type, fn: filteringDateAndTypeForYou('09', typeGraphic.type, typeGraphic.value) },
+                { name: "Out", type: typeGraphic.type, fn: filteringDateAndTypeForYou('10', typeGraphic.type, typeGraphic.value) },
+                { name: "Nov", type: typeGraphic.type, fn: filteringDateAndTypeForYou('11', typeGraphic.type, typeGraphic.value) },
+                { name: "Dez", type: typeGraphic.type, fn: filteringDateAndTypeForYou('12', typeGraphic.type, typeGraphic.value) },
+            ]
+
+            return res.status(200).json({
+                data: months
+
+            })
+        }
+
     }
 }
 

@@ -27,6 +27,8 @@ routes.post('/nova-senha', SessionController.redefinePassword)
 
 routes.use(auth)
 
+routes.post('/grafico', PostConttroller.graphData)
+
 routes.post('/comissao', PostConttroller.comissionData)
 
 routes.get('/', (req, res) => {
