@@ -9,7 +9,7 @@ const job = new CronJob(
     '0 */5 * * * *',
 
     function () {
-        // searchSync();
+        searchSync();
     },
     null,
     true,
