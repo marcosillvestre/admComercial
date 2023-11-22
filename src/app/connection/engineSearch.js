@@ -212,7 +212,6 @@ async function searchSync(limit) {
                             console.log(`${array[i].name} está com o / no contrato : ${array[i].contrato}`)
                         }
 
-
                     }
                 }
             }
