@@ -208,12 +208,12 @@ class PostController {
                         }
                     }
                 }
-                return res.status(200).json({
-                    data: {
+                return res.status(200).json(
+                    {
                         message: 'Success',
                         total: `${response.data.total} pessoa(s) foram dadas como ganho nos últimos ${comebackDays} dias`
                     }
-                })
+                )
             })
             .catch(() => {
                 return res.status(400).json({ message: 'Something went wrong' })
