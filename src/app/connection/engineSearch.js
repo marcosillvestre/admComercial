@@ -4,23 +4,23 @@ import { CronJob } from "cron";
 import "dotenv/config";
 
 const prisma = new PrismaClient()
-let limit = 200
 
+const limit = 200
+const comebackDays = 3
 const job = new CronJob(
     '0 */5 * * * *',
 
     function () {
         searchSync(limit);
-        data()
     },
     null,
     true,
     'America/Los_Angeles'
 )
 
-const lastTwoDay = new Date()
-lastTwoDay.setDate(lastTwoDay.getDate() - 3)
-const startDate = lastTwoDay.toISOString()
+const backDay = new Date()
+backDay.setDate(backDay.getDate() - comebackDays)
+const startDate = backDay.toISOString()
 
 const currentDate = new Date()
 const endDate = currentDate.toISOString()
@@ -32,6 +32,7 @@ async function searchSync(limit) {
 
     await axios.get(`https://crm.rdstation.com/api/v1/deals?limit=${limit}&token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
+            console.log(response.data.total)
             if (response.data.total > 0) {
                 const array = []
                 for (const index of response?.data?.deals) {
@@ -200,11 +201,11 @@ async function searchSync(limit) {
                             })
                                 .then(() => console.log(`${array[i].name} foi cadastrado no sistema com sucesso`))
                                 .catch((err) => {
+                                    if (err.meta) {
+                                        console.log(`${array[i].name} está com o contrato repetido : ${array[i].contrato}, ${array[i].dataMatricula} `)
+                                    }
                                     if (!err.meta) {
                                         console.log("Error : " + err)
-                                    }
-                                    if (err.meta) {
-                                        console.log(`${array[i].name} está com o contrato repetido : ${array[i].contrato}`)
                                     }
                                 })
                         }
@@ -217,9 +218,3 @@ async function searchSync(limit) {
             }
         })
 }
-
-const data = async () => {
-    await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
-        .then(res => console.log(res.data.total))
-}
-

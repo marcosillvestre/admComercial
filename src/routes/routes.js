@@ -27,6 +27,8 @@ routes.post('/nova-senha', SessionController.redefinePassword)
 
 routes.use(auth)
 
+routes.post('/page-update', PostConttroller.searchSync)
+
 routes.post('/grafico', PostConttroller.graphData)
 
 routes.post('/comissao', PostConttroller.comissionData)
@@ -48,9 +50,9 @@ routes.get('/contrato/:unity', PostConttroller.getRecent)
 routes.get('/users', UserController.index)
 routes.delete('/users/:id', UserController.delete)
 
-routes.get('/controle', PostConttroller.index)
 routes.put('/controle/:id', PostConttroller.update)
 routes.delete('/controle/:id', PostConttroller.delete)
 
+routes.put('/multi-update', PostConttroller.updateMany)
 
 export default routes
