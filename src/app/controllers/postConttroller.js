@@ -398,25 +398,17 @@ class PostController {
 
         if (settledPeriod[range] === 3) {
             const dbData = await prisma.person.findMany()
+            const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
             const firstDayThisMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1);
+            firstDayThisMonth.setUTCHours(0, 0, 0, 0);
 
-            const generalMonthsBefore = dbData?.filter(res => {
+            const generalMonthsBefore = filtered?.filter(res => {
                 const date = res[types].split("/")
                 return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= firstDayThisMonth
             })
 
             const slicedData = generalMonthsBefore.slice(skip, take + skip)
 
-            if (role === 'comercial') {
-                const sellerRanges = slicedData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-                return res.status(200).json({
-                    data: {
-                        period: range,
-                        total: sellerRanges.length,
-                        deals: sellerRanges
-                    }
-                })
-            }
 
             return res.status(200).json({
                 data: {
@@ -432,15 +424,13 @@ class PostController {
         if (settledPeriod[range] === 1 || settledPeriod[range] === 2) {
             const dbData = await prisma.person.findMany()
 
-            const firstDayLastMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+            const firstDayLastMonth = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1);
 
-            // Agora, para obter o primeiro dia do mês passado, subtraímos um mês do primeiro dia do mês atual.
             firstDayLastMonth.setMonth(firstDayLastMonth.getMonth() - settledPeriod[range]);
 
-            const diaDeHoje = new Date(); // Obtém a data atual.
-            const diaPrimeiroDesseMes = new Date(diaDeHoje.getFullYear(), diaDeHoje.getMonth(), 1); // Obtém o primeiro dia do mês atual.
+            const diaDeHoje = new Date();
+            const diaPrimeiroDesseMes = new Date(diaDeHoje.getFullYear(), diaDeHoje.getMonth(), 1);
 
-            // Agora, para obter o último dia do mês passado, subtraímos um dia do primeiro dia do mês atual.
             const primeiroDiaDoMesPassado = new Date(diaPrimeiroDesseMes);
 
 
@@ -449,8 +439,13 @@ class PostController {
             lastDayLastMonth.setMonth(lastDayLastMonth.getMonth() + 1);
             lastDayLastMonth.setDate(0);
 
+            lastDayLastMonth.setUTCHours(0, 0, 0, 0);
+            firstDayLastMonth.setUTCHours(0, 0, 0, 0);
 
-            const generalMonthsBefore = dbData?.filter(res => {
+            const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
+
+
+            const generalMonthsBefore = filtered?.filter(res => {
                 const date = res[types].split("/")
                 return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
                     firstDayLastMonth &&
@@ -459,17 +454,6 @@ class PostController {
             })
 
             const slicedData = generalMonthsBefore.slice(skip, take + skip)
-
-            if (role === 'comercial') {
-                const sellerRanges = slicedData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-                return res.status(200).json({
-                    data: {
-                        period: range,
-                        total: sellerRanges.length,
-                        deals: sellerRanges
-                    }
-                })
-            }
 
             return res.status(200).json({
                 data: {
@@ -484,6 +468,7 @@ class PostController {
             const dbData = await prisma.person.findMany()
 
             const mixedDates = dates.split("~")
+            const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
 
             const generalRangeDates = dbData?.filter(res => {
                 const date = res[types].split("/")
@@ -493,18 +478,9 @@ class PostController {
                     new Date(mixedDates[1])
             })
 
-            const slicedData = generalRangeDates.slice(skip, take + skip)
+            const slicedData = filtered.slice(skip, take + skip)
 
-            if (role === 'comercial') {
-                const sellerRanges = slicedData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-                return res.status(200).json({
-                    data: {
-                        period: range,
-                        total: sellerRanges.length,
-                        deals: sellerRanges
-                    }
-                })
-            }
+
 
             return res.status(200).json({
                 data: {
@@ -519,26 +495,15 @@ class PostController {
             const dbData = await prisma.person.findMany()
 
             const periodDate = new Date(currentDay.setDate(currentDay.getDate() - rangePeriod[range]))
+            const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
 
-            const generalRangePeriod = dbData?.filter(res => {
+            const generalRangePeriod = filtered?.filter(res => {
                 const date = res[types].split("/")
                 return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= periodDate
             })
 
 
             const slicedData = generalRangePeriod.slice(skip, take + skip)
-
-
-            if (role === 'comercial') {
-                const sellerRanges = slicedData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase()))
-                return res.status(200).json({
-                    data: {
-                        period: range,
-                        total: sellerRanges.length,
-                        deals: sellerRanges
-                    }
-                })
-            }
 
             return res.status(200).json({
                 data: {

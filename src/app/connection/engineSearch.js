@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 const limit = 200
 const comebackDays = 3
 const job = new CronJob(
-    '0 */5 * * * *',
+    '0 */30 * * * *',
 
     function () {
         searchSync(limit);
