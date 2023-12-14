@@ -467,29 +467,35 @@ class PostController {
 
         if (settledPeriod[range] === 0) {
             const dbData = await prisma.person.findMany()
-
             const mixedDates = dates.split("~")
-            const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
 
-            const generalRangeDates = dbData?.filter(res => {
-                const date = res[types].split("/")
-                return new Date(`${date[2]}-${date[1]}-${date[0]}`) >=
-                    new Date(mixedDates[0]) &&
-                    new Date(`${date[2]}-${date[1]}-${date[0]}`) <=
-                    new Date(mixedDates[1])
-            })
+            if (!(mixedDates.some(res => res === 'null'))) {
 
-            const slicedData = filtered.slice(skip, endData + skip)
+                const filtered = role === 'comercial' ? dbData.filter(res => res.owner.toLowerCase().includes(name.toLowerCase())) : dbData
+
+                const generalRangeDates = filtered?.filter(res => {
+                    const date = res[types].split("/")
+                    return new Date(`${date[2]}-${date[1]}-${date[0]}`).setUTCHours(0, 0, 0, 0) >=
+                        new Date(mixedDates[0]).setUTCHours(0, 0, 0, 0) &&
+                        new Date(`${date[2]}-${date[1]}-${date[0]}`).setUTCHours(0, 0, 0, 0) <=
+                        new Date(mixedDates[1]).setUTCHours(0, 0, 0, 0)
+                })
+
+                generalRangeDates.map(res => {
+                    console.log(res.name + " " + res.dataMatricula)
+                })
+
+                const slicedData = generalRangeDates.slice(skip, endData + skip)
 
 
-
-            return res.status(200).json({
-                data: {
-                    period: range,
-                    total: generalRangeDates.length,
-                    deals: slicedData
-                }
-            })
+                return res.status(200).json({
+                    data: {
+                        period: range,
+                        total: generalRangeDates.length,
+                        deals: slicedData
+                    }
+                })
+            }
         }
 
         if (rangePeriod[range] !== undefined) {
