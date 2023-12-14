@@ -22,7 +22,6 @@ const options = { method: 'GET', headers: { accept: 'application/json' } };
 class PostController {
 
     async searchSync(req, res) {
-
         await axios.get(`https://crm.rdstation.com/api/v1/deals?limit=${limit}&token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
             .then(async response => {
                 if (response.data.total > 0) {
@@ -112,7 +111,6 @@ class PostController {
                         array.push(body)
                     }
                     if (array) {
-
                         for (let i = 0; i < array.length; i++) {
                             if (!(array[i].contrato.includes("/"))) {
 
@@ -360,8 +358,7 @@ class PostController {
             }
         }).then(() => {
             return res.status(200).json("Success")
-        }).catch((error) => {
-            console.log(error)
+        }).catch(() => {
             return res.status(200).json("Error")
         }
         )
@@ -381,6 +378,9 @@ class PostController {
     async indexPeriod(req, res) {
 
         const { range, role, name, unity, dates, types, skip, take } = req.body
+        const dbData = await prisma.person.findMany()
+
+        const endData = take !== 'all' ? parseInt(take) : dbData.length
 
 
         const settledPeriod = {
@@ -407,7 +407,8 @@ class PostController {
                 return new Date(`${date[2]}-${date[1]}-${date[0]}`) >= firstDayThisMonth
             })
 
-            const slicedData = generalMonthsBefore.slice(skip, take + skip)
+
+            const slicedData = generalMonthsBefore.slice(skip, endData + skip)
 
 
             return res.status(200).json({
@@ -453,7 +454,7 @@ class PostController {
                     lastDayLastMonth
             })
 
-            const slicedData = generalMonthsBefore.slice(skip, take + skip)
+            const slicedData = generalMonthsBefore.slice(skip, endData + skip)
 
             return res.status(200).json({
                 data: {
@@ -478,7 +479,7 @@ class PostController {
                     new Date(mixedDates[1])
             })
 
-            const slicedData = filtered.slice(skip, take + skip)
+            const slicedData = filtered.slice(skip, endData + skip)
 
 
 
@@ -503,7 +504,7 @@ class PostController {
             })
 
 
-            const slicedData = generalRangePeriod.slice(skip, take + skip)
+            const slicedData = generalRangePeriod.slice(skip, endData + skip)
 
             return res.status(200).json({
                 data: {
@@ -519,7 +520,7 @@ class PostController {
     async updateMany(req, res) {
         const { contracts, where, value } = req.body
 
-        if (contracts.length > 0) {
+        if (contracts) {
             try {
                 contracts.map(async data => {
                     await prisma.person.update(
