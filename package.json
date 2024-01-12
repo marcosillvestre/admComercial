@@ -6,8 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "nodemon",
-        "start": "node index.js",
-        "postinstall": "prisma generate && prisma migrate deploy"
+        "start": "node index.js"
     },
     "keywords": [],
     "author": "",
