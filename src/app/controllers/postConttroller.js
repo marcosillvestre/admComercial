@@ -222,7 +222,7 @@ class PostController {
     async getRecent(req, res) {
         const { unity } = req.params
 
-        await axios.get(`https://crm.rdstation.com/api/v1/deals?token=${process.env.RD_TOKEN}&deal_pipeline_id=${funis[unity]}&deal_stage_id=${stages[unity]}`)
+        await axios.get(`https://crm.rdstation.com/api/v1/deals?limit=100&token=${process.env.RD_TOKEN}&deal_pipeline_id=${funis[unity]}&deal_stage_id=${stages[unity]}`)
             .then(response => {
                 const array = []
                 for (const index of response?.data?.deals) {
@@ -479,10 +479,6 @@ class PostController {
                         new Date(mixedDates[0]).setUTCHours(0, 0, 0, 0) &&
                         new Date(`${date[2]}-${date[1]}-${date[0]}`).setUTCHours(0, 0, 0, 0) <=
                         new Date(mixedDates[1]).setUTCHours(0, 0, 0, 0)
-                })
-
-                generalRangeDates.map(res => {
-                    console.log(res.name + " " + res.dataMatricula)
                 })
 
                 const slicedData = generalRangeDates.slice(skip, endData + skip)
