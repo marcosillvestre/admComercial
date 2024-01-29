@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import { Router } from 'express';
+import CreateDocuments from '../app/controllers/createDocuments.js';
 import PostConttroller from "../app/controllers/postConttroller.js";
 import SessionController from "../app/controllers/sessionController.js";
 import UnityController from "../app/controllers/unitiesController.js";
@@ -11,6 +12,7 @@ const routes = Router();
 // const corsOptions = {
 //     origin: "http://localhost:5173"
 // }
+
 
 
 const parser = bodyParser.urlencoded({ extended: false })
@@ -25,7 +27,11 @@ routes.post('/redefinir-senha', SessionController.forgetPassword)
 routes.post('/nova-senha', SessionController.redefinePassword)
 
 
+
+
 routes.use(auth)
+
+routes.post('/criar-contratos', CreateDocuments.store)
 
 routes.post('/page-update', PostConttroller.searchSync)
 

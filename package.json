@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "dev": "nodemon",
-        "start": "node index.js"
+        "start": "node index.js",
+        "postinstall": "prisma generate && prisma migrate deploy"
     },
     "keywords": [],
     "author": "",
@@ -22,6 +23,8 @@
         "jsonwebtoken": "^9.0.0",
         "nodemailer": "^6.9.7",
         "npm": "^9.8.0",
+        "pdf-creator-node": "^2.3.5",
+        "rimraf": "^5.0.5",
         "uuid": "^9.0.0",
         "yup": "^1.2.0"
     },
