@@ -27,8 +27,6 @@ routes.post('/redefinir-senha', SessionController.forgetPassword)
 routes.post('/nova-senha', SessionController.redefinePassword)
 
 
-
-
 routes.use(auth)
 
 routes.post('/criar-contratos', CreateDocuments.store)
