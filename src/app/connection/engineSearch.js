@@ -246,21 +246,17 @@ let futureDate = addUsefullDays(today, 7);
 
 async function trelloCreateCard(array) {
     const data = array[0]
-    const unities = {
-        "Golfinho azul": process.env.PTB_LIST,
-        'PTB': process.env.PTB_LIST,
-        'Centro': "",
-    }
+
     const templates = {
         "Golfinho azul": process.env.PTB_TEMPLATE,
         'PTB': process.env.PTB_TEMPLATE,
-        'Centro': ""
+        'Centro': process.env.CENTRO_TEMPLATE
     }
 
     const idList = {
         "Golfinho azul": process.env.PTB_LIST,
         'PTB': process.env.PTB_LIST,
-        'Centro': ""
+        'Centro': process.env.CENTRO_LIST
 
     }
 
@@ -293,7 +289,7 @@ async function trelloCreateCard(array) {
         pos: 'top',
         due: futureDate,
         start: today,
-        idList: unities[data.unidade],
+        idList: idList[data.unidade],
         idCardSource: templates[data.unidade]
     }
 
