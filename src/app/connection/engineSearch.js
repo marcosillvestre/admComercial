@@ -257,6 +257,13 @@ async function trelloCreateCard(array) {
         'Centro': ""
     }
 
+    const idList = {
+        "Golfinho azul": process.env.PTB_LIST,
+        'PTB': process.env.PTB_LIST,
+        'Centro': ""
+
+    }
+
     const body = {
         name: data.name,
         desc: `
@@ -290,7 +297,9 @@ async function trelloCreateCard(array) {
         idCardSource: templates[data.unidade]
     }
 
-    await axios.post(`https://api.trello.com/1/cards?idList=${process.env.PTB_LIST}&key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`, body)
+    let list = idList[data.unidade]
+
+    await axios.post(`https://api.trello.com/1/cards?idList=${list}&key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`, body)
         .then(() => console.log("Enviado ao trello"))
         .catch(() => console.log("Erro ao enviar ao trello"))
 }
