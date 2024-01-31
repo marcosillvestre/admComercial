@@ -17,8 +17,8 @@ const __dirname = dirname(__filename);
 class CreateDocuments {
     async store(req, res) {
 
-        const contractData = req.body
-
+        const info = req.body
+        const contractData = [info]
 
         const archives = {
             "Kids": "idioma",

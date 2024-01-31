@@ -18,17 +18,18 @@ const job = new CronJob(
     'America/Los_Angeles'
 )
 
-const backDay = new Date()
-backDay.setDate(backDay.getDate() - comebackDays)
-const startDate = backDay.toISOString()
-
-const currentDate = new Date()
-const endDate = currentDate.toISOString()
 
 const options = { method: 'GET', headers: { accept: 'application/json' } };
 
 
 async function searchSync(limit) {
+
+    const backDay = new Date()
+    backDay.setDate(backDay.getDate() - comebackDays)
+    const startDate = backDay.toISOString()
+
+    const currentDate = new Date()
+    const endDate = currentDate.toISOString()
 
     await axios.get(`https://crm.rdstation.com/api/v1/deals?limit=${limit}&token=${process.env.RD_TOKEN}&win=true&closed_at_period=true&start_date=${startDate}&end_date=${endDate}`, options)
         .then(async response => {
@@ -199,7 +200,10 @@ async function searchSync(limit) {
                                     comissaoStatus: "Pendente",
                                 }
                             })
-                                .then(() => console.log(`${array[i].name} foi cadastrado no sistema com sucesso`))
+                                .then(() => {
+                                    console.log(`${array[i].name} foi cadastrado no sistema com sucesso`)
+                                    trelloCreateCard(array)
+                                })
                                 .catch((err) => {
                                     if (err.meta) {
                                         console.log(`${array[i].name} está com o contrato repetido : ${array[i].contrato}, ${array[i].dataMatricula} `)
@@ -208,6 +212,7 @@ async function searchSync(limit) {
                                         console.log("Error : " + err)
                                     }
                                 })
+
                         }
                         else {
                             console.log(`${array[i].name} está com o / no contrato : ${array[i].contrato}`)
@@ -218,6 +223,76 @@ async function searchSync(limit) {
             }
         })
 }
-// searchSync(limit);
+function addUsefullDays(data, diasUteis) {
+    var dataAtual = new Date(data);
+    var diasAdicionados = 0;
+
+    while (diasAdicionados < diasUteis) {
+        dataAtual.setDate(dataAtual.getDate() + 1);
+
+        // Verifica se o dia adicionado é um dia útil (de segunda a sexta)
+        if (dataAtual.getDay() !== 0 && dataAtual.getDay() !== 6) {
+            diasAdicionados++;
+        }
+    }
+
+    return dataAtual;
+}
+
+
+let today = new Date();
+
+let futureDate = addUsefullDays(today, 7);
+
+async function trelloCreateCard(array) {
+    const data = array[0]
+    const unities = {
+        "Golfinho azul": process.env.PTB_LIST,
+        'PTB': process.env.PTB_LIST,
+        'Centro': "",
+    }
+    const templates = {
+        "Golfinho azul": process.env.PTB_TEMPLATE,
+        'PTB': process.env.PTB_TEMPLATE,
+        'Centro': ""
+    }
+
+    const body = {
+        name: data.name,
+        desc: `
+        "background":${data.background},
+        "nome do aluno":${data.aluno},
+        "idade" : ${data.idadeAluno},
+        "vendedor" : ${data.owner},
+        "responsável" : ${data.professor},
+        "whatsapp" : ${data.tel},
+        Precisa de nivelamento: ${data.nivelamento},
+        Professor: ${data.professor},
+        Dia de aula: ${data.diaAula.map(res => res)},
+        Dia da Primeira aula: ${data.paDATA},
+        Horario: ${data.horarioInicio} às ${data.horarioFim},
+        Caga Horaria do curso: ${data.cargaHoraria},
+        Curso: ${data.curso},
+        Classe: ${data.classe},
+        Sub Classe: ${data.subclasse},
+        Material: ${data.materialDidatico.map(res => res)},
+        modalidade: ${data.tipoModalidade},
+        Formato das aulas: ${data.formatoAula},
+        anotações: ${data.observacao},
+        Valor do material: ${data.mdValor},
+        Vaor da taxa de matricula: ${data.tmValor},
+        Valor da mensalidade: ${data.ppValor},
+        `,
+        pos: 'top',
+        due: futureDate,
+        start: today,
+        idList: unities[data.unidade],
+        idCardSource: templates[data.unidade]
+    }
+
+    await axios.post(`https://api.trello.com/1/cards?idList=${process.env.PTB_LIST}&key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`, body)
+        .then(() => console.log("Enviado ao trello"))
+        .catch(() => console.log("Erro ao enviar ao trello"))
+}
 
 
