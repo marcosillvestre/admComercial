@@ -119,6 +119,7 @@ async function searchSync(limit) {
 
                     }
                     array.push(body)
+
                 }
                 if (array) {
                     array.map(async res => {
@@ -240,9 +241,6 @@ function addUsefullDays(data, diasUteis) {
 
 
 async function trelloCreateCard(array) {
-
-    console.log(array)
-
     let today = new Date();
     let futureDate = addUsefullDays(today, 7);
 
