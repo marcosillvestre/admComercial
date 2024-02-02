@@ -256,7 +256,6 @@ async function trelloCreateCard(array) {
         "Golfinho azul": process.env.PTB_LIST,
         'PTB': process.env.PTB_LIST,
         'Centro': process.env.CENTRO_LIST
-
     }
 
     const body = {
