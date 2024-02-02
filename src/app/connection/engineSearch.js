@@ -240,11 +240,11 @@ function addUsefullDays(data, diasUteis) {
 }
 
 
-let today = new Date();
-
-let futureDate = addUsefullDays(today, 7);
-
 async function trelloCreateCard(array) {
+
+    let today = new Date();
+    let futureDate = addUsefullDays(today, 7);
+
     const data = array[0]
 
     const templates = {
@@ -263,12 +263,12 @@ async function trelloCreateCard(array) {
     const body = {
         name: data.name,
         desc: `
-        "background":${data.background},
-        "nome do aluno":${data.aluno},
-        "idade" : ${data.idadeAluno},
-        "vendedor" : ${data.owner},
-        "responsável" : ${data.professor},
-        "whatsapp" : ${data.tel},
+        background:${data.background},
+        nome do aluno:${data.aluno},
+        idade : ${data.idadeAluno},
+        vendedor : ${data.owner},
+        responsável : ${data.professor},
+        whatsapp : ${data.tel},
         Precisa de nivelamento: ${data.nivelamento},
         Professor: ${data.professor},
         Dia de aula: ${data.diaAula.map(res => res)},
