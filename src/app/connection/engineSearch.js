@@ -6,7 +6,7 @@ import "dotenv/config";
 const prisma = new PrismaClient()
 
 const limit = 200
-const comebackDays = 3
+const comebackDays = 2
 const job = new CronJob(
     '0 */30 * * * *',
 
@@ -121,108 +121,108 @@ async function searchSync(limit) {
                     array.push(body)
                 }
                 if (array) {
-
-                    for (let i = 0; i < array.length; i++) {
-                        if (!(array[i].contrato.includes("/"))) {
-
+                    array.map(async res => {
+                        if (!(res.contrato.includes("/"))) {
                             await prisma.person.create({
                                 data: {
-                                    name: array[i].name,
-                                    owner: array[i].owner,
-                                    unidade: array[i].unidade,
-                                    background: array[i].background,
+                                    name: res.name,
+                                    owner: res.owner,
+                                    unidade: res.unidade,
+                                    background: res.background,
                                     tipoMatricula: "Pendente",
                                     tipoComissao: "Pendente",
                                     comissaoValor: "Pendente",
                                     diretorResponsavel: "Pendente",
-                                    Valor: array[i].Valor || 0.0,
-                                    id: array[i].id,
+                                    Valor: res.Valor || 0.0,
+                                    id: res.id,
                                     situMatric: "Pendente",
                                     paStatus: "Pendente",
 
                                     responsavelADM: "Pendente",
                                     aprovacaoADM: "Pendente",
                                     aprovacaoDirecao: "Pendente",
-                                    contrato: array[i].contrato,
-                                    inicioContrato: array[i].inicioContrato,
-                                    fimContrato: array[i].fimContrato,
-                                    acFormato: array[i].acFormato,
+                                    contrato: res.contrato,
+                                    inicioContrato: res.inicioContrato,
+                                    fimContrato: res.fimContrato,
+                                    acFormato: res.acFormato,
                                     acStatus: "Pendente",
-                                    tmValor: array[i].tmValor,
-                                    tmVencimento: array[i].tmVencimento,
+                                    tmValor: res.tmValor,
+                                    tmVencimento: res.tmVencimento,
                                     tmStatus: "Pendente",
-                                    ppVencimento: array[i].ppVencimento,
-                                    mdValor: array[i].mdValor,
+                                    ppVencimento: res.ppVencimento,
+                                    mdValor: res.mdValor,
                                     mdStatus: "Pendente",
-                                    aluno: array[i].aluno,
-                                    tel: array[i].tel,
-                                    email: array[i].email,
-                                    paDATA: array[i].paDATA,
-                                    classe: array[i].classe,
-                                    subclasse: array[i].subclasse,
+                                    aluno: res.aluno,
+                                    tel: res.tel,
+                                    email: res.email,
+                                    paDATA: res.paDATA,
+                                    classe: res.classe,
+                                    subclasse: res.subclasse,
                                     ppStatus: "Pendente",
 
 
                                     dataAC: [{ name: 'Pendente' }],
-                                    formatoAula: array[i].formatoAula,
-                                    tipoModalidade: array[i].tipoModalidade,
-                                    professor: array[i].professor,
-                                    horarioFim: array[i].horarioFim,
+                                    formatoAula: res.formatoAula,
+                                    tipoModalidade: res.tipoModalidade,
+                                    professor: res.professor,
+                                    horarioFim: res.horarioFim,
 
-                                    horarioInicio: array[i].horarioInicio,
-                                    materialDidatico: array[i].materialDidatico,
-                                    nivelamento: array[i].nivelamento,
-                                    diaAula: array[i].diaAula,
-                                    alunoNascimento: array[i].alunoNascimento,
-                                    idadeAluno: `${array[i].idadeAluno}`,
+                                    horarioInicio: res.horarioInicio,
+                                    materialDidatico: res.materialDidatico,
+                                    nivelamento: res.nivelamento,
+                                    diaAula: res.diaAula,
+                                    alunoNascimento: res.alunoNascimento,
+                                    idadeAluno: `${res.idadeAluno}`,
                                     tempoContrato: "",
-                                    dataMatricula: array[i].dataMatricula,
+                                    dataMatricula: res.dataMatricula,
                                     observacao: "",
                                     dataValidacao: "",
                                     dataComissionamento: "",
                                     contratoStatus: "Pendente",
-                                    cargaHoraria: `${array[i].cargaHoraria}`,
+                                    cargaHoraria: `${res.cargaHoraria}`,
                                     tmDesconto: "",
-                                    tmFormaPg: array[i].tmFormaPg,
+                                    tmFormaPg: res.tmFormaPg,
                                     tmParcelas: "",
                                     tmData: "",
-                                    ppDesconto: array[i].ppDesconto,
+                                    ppDesconto: res.ppDesconto,
                                     ppFormaPg: "",
-                                    ppParcelas: array[i].ppParcelas,
+                                    ppParcelas: res.ppParcelas,
                                     ppData: "",
-                                    ppValor: array[i].ppValor,
+                                    ppValor: res.ppValor,
                                     mdDesconto: "",
-                                    mdFormaPg: array[i].mdFormaPg,
+                                    mdFormaPg: res.mdFormaPg,
                                     mdParcelas: "",
                                     mdData: "",
-                                    mdVencimento: array[i].mdVencimento,
-                                    curso: array[i].curso,
+                                    mdVencimento: res.mdVencimento,
+                                    curso: res.curso,
                                     comissaoStatus: "Pendente",
                                 }
                             })
                                 .then(() => {
-                                    console.log(`${array[i].name} foi cadastrado no sistema com sucesso`)
-                                    trelloCreateCard(array)
+                                    console.log(`${res.name} foi cadastrado no sistema com sucesso`)
+                                    trelloCreateCard(res)
                                 })
                                 .catch((err) => {
                                     if (err.meta) {
-                                        console.log(`${array[i].name} está com o contrato repetido : ${array[i].contrato}, ${array[i].dataMatricula} `)
+                                        console.log(`${res.name} está com o contrato repetido : ${res.contrato}, ${res.dataMatricula}, ${res.unidade} `)
                                     }
                                     if (!err.meta) {
                                         console.log("Error : " + err)
                                     }
                                 })
-
                         }
                         else {
-                            console.log(`${array[i].name} está com o / no contrato : ${array[i].contrato}`)
+                            console.log(`${res.name} está com o / no contrato : ${res.contrato}`)
                         }
+                    })
 
-                    }
+
                 }
             }
-        })
+        }
+        )
 }
+
 function addUsefullDays(data, diasUteis) {
     var dataAtual = new Date(data);
     var diasAdicionados = 0;
@@ -230,7 +230,6 @@ function addUsefullDays(data, diasUteis) {
     while (diasAdicionados < diasUteis) {
         dataAtual.setDate(dataAtual.getDate() + 1);
 
-        // Verifica se o dia adicionado é um dia útil (de segunda a sexta)
         if (dataAtual.getDay() !== 0 && dataAtual.getDay() !== 6) {
             diasAdicionados++;
         }
@@ -242,10 +241,12 @@ function addUsefullDays(data, diasUteis) {
 
 async function trelloCreateCard(array) {
 
+    console.log(array)
+
     let today = new Date();
     let futureDate = addUsefullDays(today, 7);
 
-    const data = array[0]
+    const data = array
 
     const templates = {
         "Golfinho azul": process.env.PTB_TEMPLATE,
